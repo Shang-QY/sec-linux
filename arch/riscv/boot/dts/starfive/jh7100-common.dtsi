@@ -182,20 +182,6 @@
 		};
 	};
 
-	pwmdac_pins: pwmdac-0 {
-		pwmdac-pins {
-			pinmux = <GPIOMUX(23, GPO_PWMDAC_LEFT_OUT,
-				  GPO_ENABLE, GPI_NONE)>,
-				 <GPIOMUX(24, GPO_PWMDAC_RIGHT_OUT,
-				  GPO_ENABLE, GPI_NONE)>;
-			bias-disable;
-			drive-strength = <35>;
-			input-disable;
-			input-schmitt-disable;
-			slew-rate = <0>;
-		};
-	};
-
 	pwm_pins: pwm-0 {
 		pwm-pins {
 			pinmux = <GPIOMUX(7,
@@ -359,24 +345,6 @@
 	pinctrl-0 = <&i2c1_pins>;
 	status = "okay";
 
-#ifdef WM8960_ENABLED
-	wm8960: codec@1a {
-		compatible = "wlf,wm8960";
-		reg = <0x1a>;
-		#sound-dai-cells = <0>;
-		wlf,shared-lrclk;
-	};
-#endif
-
-#ifdef AC108_ENABLED
-	ac108_a: ac108@3b {
-		compatible = "x-power,ac108_0";
-		reg = <0x3b>;
-		#sound-dai-cells = <0>;
-		data-protocol = <0>;
-	};
-#endif
-
 	/* TODO: Used for EVB board, should comment here for starlight board, remove it later*/
 	ov5640: ov5640@3c {
 		compatible = "ovti,ov5640";
@@ -478,12 +446,6 @@
 &ptc {
 	pinctrl-names = "default";
 	pinctrl-0 = <&pwm_pins>;
-	status = "okay";
-};
-
-&pwmdac {
-	pinctrl-names = "default";
-	pinctrl-0 = <&pwmdac_pins>;
 	status = "okay";
 };
 
