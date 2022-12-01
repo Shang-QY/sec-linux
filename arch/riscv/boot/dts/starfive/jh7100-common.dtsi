@@ -84,39 +84,6 @@
 	/* don't reset gpio mux for serial console on uart3 */
 	starfive,keep-gpiomux = <13 14 0 2 3 45>;
 
-	spi2_pins: spi2-0 {
-		mosi-pins {
-			pinmux = <GPIOMUX(18, GPO_SPI2_PAD_TXD,
-				  GPO_ENABLE, GPI_NONE)>;
-			bias-disable;
-			input-disable;
-			input-schmitt-disable;
-		};
-		miso-pins {
-			pinmux = <GPIOMUX(16, GPO_LOW, GPO_DISABLE,
-				  GPI_SPI2_PAD_RXD)>;
-			bias-pull-up;
-			input-enable;
-			input-schmitt-enable;
-		};
-		sck-pins {
-			pinmux = <GPIOMUX(12, GPO_SPI2_PAD_SCK_OUT,
-				  GPO_ENABLE, GPI_NONE)>;
-			bias-disable;
-			input-disable;
-			input-schmitt-disable;
-		};
-		ss-pins {
-			pinmux = <GPIOMUX(15, GPO_SPI2_PAD_SS_0_N,
-				  GPO_ENABLE, GPI_NONE)>,
-				 <GPIOMUX(11, GPO_SPI2_PAD_SS_1_N,
-				  GPO_ENABLE, GPI_NONE)>;
-			bias-disable;
-			input-disable;
-			input-schmitt-disable;
-		};
-	};
-
 	uart3_pins: uart3-0 {
 		rx-pins {
 			pinmux = <GPIOMUX(13, GPO_LOW, GPO_DISABLE,
@@ -145,50 +112,6 @@
 
 &osc_aud {
 	clock-frequency = <27000000>;
-};
-
-&qspi {
-	nor_flash: nor-flash@0 {
-		compatible = "spi-flash";
-		reg = <0>;
-		spi-max-frequency = <31250000>;
-		page-size = <256>;
-		block-size = <16>;
-		cdns,read-delay = <4>;
-		cdns,tshsl-ns = <1>;
-		cdns,tsd2d-ns = <1>;
-		cdns,tchsh-ns = <1>;
-		cdns,tslch-ns = <1>;
-		spi-tx-bus-width = <1>;
-		spi-rx-bus-width = <1>;
-	};
-
-	nand_flash: nand-flash@1 {
-		compatible = "spi-flash-nand";
-		reg = <1>;
-		spi-max-frequency = <31250000>;
-		page-size = <2048>;
-		block-size = <17>;
-		cdns,read-delay = <4>;
-		cdns,tshsl-ns = <1>;
-		cdns,tsd2d-ns = <1>;
-		cdns,tchsh-ns = <1>;
-		cdns,tslch-ns = <1>;
-		spi-tx-bus-width = <1>;
-		spi-rx-bus-width = <1>;
-	};
-};
-
-&spi2 {
-	pinctrl-names = "default";
-	pinctrl-0 = <&spi2_pins>;
-	status = "okay";
-
-	spi_dev0: spi@0 {
-		compatible = "rohm,dh2228fv";
-		spi-max-frequency = <10000000>;
-		reg = <0>;
-	};
 };
 
 &uart3 {

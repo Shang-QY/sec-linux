@@ -78,6 +78,7 @@
 		};
 	};
 
+    // sys clock
 	osc_sys: osc_sys {
 		compatible = "fixed-clock";
 		#clock-cells = <0>;
@@ -216,21 +217,6 @@
 			#reset-cells = <1>;
 		};
 
-		qspi: spi@11860000 {
-			compatible = "cdns,qspi-nor";
-			reg = <0x0 0x11860000 0x0 0x10000>,
-			      <0x0 0x20000000 0x0 0x20000000>;
-			clocks = <&clkgen JH7100_CLK_QSPI_AHB>;
-			interrupts = <3>;
-			#address-cells = <1>;
-			#size-cells = <0>;
-			cdns,fifo-depth = <256>;
-			cdns,fifo-width = <4>;
-			cdns,trigger-address = <0x0>;
-			spi-max-frequency = <250000000>;
-			status = "disabled";
-		};
-
 		gpio: pinctrl@11910000 {
 			compatible = "starfive,jh7100-pinctrl";
 			reg = <0x0 0x11910000 0x0 0x10000>,
@@ -243,34 +229,6 @@
 			#gpio-cells = <2>;
 			interrupt-controller;
 			#interrupt-cells = <2>;
-		};
-
-		spi2: spi@12410000 {
-			compatible = "snps,dw-apb-ssi";
-			reg = <0x0 0x12410000 0x0 0x10000>;
-			clocks = <&clkgen JH7100_CLK_SPI2_CORE>,
-				 <&clkgen JH7100_CLK_SPI2_APB>;
-			clock-names = "ssi_clk", "pclk";
-			resets = <&rstgen JH7100_RSTN_SPI2_APB>;
-			reset-names = "spi";
-			interrupts = <70>;
-			#address-cells = <1>;
-			#size-cells = <0>;
-			status = "disabled";
-		};
-
-		spi3: spi@12420000 {
-			compatible = "snps,dw-apb-ssi";
-			reg = <0x0 0x12420000 0x0 0x10000>;
-			clocks = <&clkgen JH7100_CLK_SPI3_CORE>,
-				 <&clkgen JH7100_CLK_SPI3_APB>;
-			clock-names = "ssi_clk", "pclk";
-			resets = <&rstgen JH7100_RSTN_SPI3_APB>;
-			reset-names = "spi";
-			interrupts = <71>;
-			#address-cells = <1>;
-			#size-cells = <0>;
-			status = "disabled";
 		};
 
 		uart3: serial@12440000 {
