@@ -16,7 +16,6 @@
 / {
 	aliases {
 		serial0 = &uart3;
-		serial1 = &uart0;
 	};
 
 	chosen {
@@ -85,70 +84,6 @@
 	/* don't reset gpio mux for serial console on uart3 */
 	starfive,keep-gpiomux = <13 14 0 2 3 45>;
 
-	i2c0_pins: i2c0-0 {
-		i2c-pins {
-			pinmux = <GPIOMUX(62, GPO_LOW,
-				  GPO_I2C0_PAD_SCK_OEN,
-				  GPI_I2C0_PAD_SCK_IN)>,
-				 <GPIOMUX(61, GPO_LOW,
-				  GPO_I2C0_PAD_SDA_OEN,
-				  GPI_I2C0_PAD_SDA_IN)>;
-			bias-disable; /* external pull-up */
-			input-enable;
-			input-schmitt-enable;
-		};
-	};
-
-	i2c1_pins: i2c1-0 {
-		i2c-pins {
-			pinmux = <GPIOMUX(47, GPO_LOW,
-				  GPO_I2C1_PAD_SCK_OEN,
-				  GPI_I2C1_PAD_SCK_IN)>,
-				 <GPIOMUX(48, GPO_LOW,
-				  GPO_I2C1_PAD_SDA_OEN,
-				  GPI_I2C1_PAD_SDA_IN)>;
-			bias-pull-up;
-			input-enable;
-			input-schmitt-enable;
-		};
-	};
-
-	i2c2_pins: i2c2-0 {
-		i2c-pins {
-			pinmux = <GPIOMUX(60, GPO_LOW,
-				  GPO_I2C2_PAD_SCK_OEN,
-				  GPI_I2C2_PAD_SCK_IN)>,
-				 <GPIOMUX(59, GPO_LOW,
-				  GPO_I2C2_PAD_SDA_OEN,
-				  GPI_I2C2_PAD_SDA_IN)>;
-			bias-disable; /* external pull-up */
-			input-enable;
-			input-schmitt-enable;
-		};
-	};
-
-	pwm_pins: pwm-0 {
-		pwm-pins {
-			pinmux = <GPIOMUX(7,
-				  GPO_PWM_PAD_OUT_BIT0,
-				  GPO_PWM_PAD_OE_N_BIT0,
-				  GPI_NONE)>,
-				 <GPIOMUX(5,
-				  GPO_PWM_PAD_OUT_BIT1,
-				  GPO_PWM_PAD_OE_N_BIT1,
-				  GPI_NONE)>;
-				// <GPIOMUX(45,
-				//  GPO_PWM_PAD_OUT_BIT2,
-				//  GPO_PWM_PAD_OE_N_BIT2,
-				//  GPI_NONE)>;
-			bias-disable;
-			drive-strength = <35>;
-			input-disable;
-			input-schmitt-disable;
-			slew-rate = <0>;
-		};
-	};
-
 	spi2_pins: spi2-0 {
 		mosi-pins {
 			pinmux = <GPIOMUX(18, GPO_SPI2_PAD_TXD,
@@ -177,29 +112,6 @@
 				 <GPIOMUX(11, GPO_SPI2_PAD_SS_1_N,
 				  GPO_ENABLE, GPI_NONE)>;
 			bias-disable;
-			input-disable;
-			input-schmitt-disable;
-		};
-	};
-
-	uart0_pins: uart0-0 {
-		rx-pins {
-			pinmux = <GPIOMUX(40, GPO_LOW, GPO_DISABLE,
-				  GPI_UART0_PAD_SIN)>,
-				 <GPIOMUX(39, GPO_LOW, GPO_DISABLE,
-				  GPI_UART0_PAD_CTSN)>;
-			bias-pull-up;
-			drive-strength = <14>;
-			input-enable;
-			input-schmitt-enable;
-		};
-		tx-pins {
-			pinmux = <GPIOMUX(41, GPO_UART0_PAD_SOUT,
-				  GPO_ENABLE, GPI_NONE)>,
-				 <GPIOMUX(42, GPO_UART0_PAD_RTSN,
-				  GPO_ENABLE, GPI_NONE)>;
-			bias-disable;
-			drive-strength = <35>;
 			input-disable;
 			input-schmitt-disable;
 		};
@@ -277,12 +189,6 @@
 		spi-max-frequency = <10000000>;
 		reg = <0>;
 	};
-};
-
-&uart0 {
-	pinctrl-names = "default";
-	pinctrl-0 = <&uart0_pins>;
-	status = "okay";
 };
 
 &uart3 {
