@@ -22,19 +22,3 @@
 	/* don't reset gpio mux for serial console and reset gpio */
 	starfive,keep-gpiomux = <13 14 63 0 2 3 45>;
 };
-
-&i2c0 {
-	eeprom@50 {
-		compatible = "atmel,24c04";
-		reg = <0x50>;
-		pagesize = <16>;
-	};
-};
-
-#ifdef WM8960_ENABLED
-#include "codecs/sf_wm8960.dtsi"
-#endif
-
-#ifdef AC108_ENABLED
-#include "codecs/sf_ac108.dtsi"
-#endif
