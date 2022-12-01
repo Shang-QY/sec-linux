@@ -257,95 +257,6 @@
 			status = "disabled";
 		};
 
-		spi0: spi@11890000 {
-			compatible = "snps,dw-apb-ssi";
-			reg = <0x0 0x11890000 0x0 0x10000>;
-			clocks = <&clkgen JH7100_CLK_SPI0_CORE>,
-				 <&clkgen JH7100_CLK_SPI0_APB>;
-			clock-names = "ssi_clk", "pclk";
-			resets = <&rstgen JH7100_RSTN_SPI0_APB>;
-			reset-names = "spi";
-			interrupts = <94>;
-			#address-cells = <1>;
-			#size-cells = <0>;
-			status = "disabled";
-		};
-
-		spi1: spi@118a0000 {
-			compatible = "snps,dw-apb-ssi";
-			reg = <0x0 0x118a0000 0x0 0x10000>;
-			clocks = <&clkgen JH7100_CLK_SPI1_CORE>,
-				 <&clkgen JH7100_CLK_SPI1_APB>;
-			clock-names = "ssi_clk", "pclk";
-			resets = <&rstgen JH7100_RSTN_SPI1_APB>;
-			reset-names = "spi";
-			interrupts = <95>;
-			#address-cells = <1>;
-			#size-cells = <0>;
-			status = "disabled";
-		};
-
-		i2c1: i2c@118c0000 {
-			compatible = "snps,designware-i2c";
-			reg = <0x0 0x118c0000 0x0 0x10000>;
-			clocks = <&clkgen JH7100_CLK_I2C1_CORE>,
-				 <&clkgen JH7100_CLK_I2C1_APB>;
-			clock-names = "ref", "pclk";
-			resets = <&rstgen JH7100_RSTN_I2C1_APB>;
-			interrupts = <97>;
-			#address-cells = <1>;
-			#size-cells = <0>;
-			status = "disabled";
-		};
-
-		vpu_enc: vpu_enc@118e0000 {
-			compatible = "cm,cm521-vpu";
-			reg = <0x0 0x118e0000 0x0 0x4000>;
-			reg-names = "control";
-			clocks =<&clkgen JH7100_CLK_VENC_AXI>,
-					<&clkgen JH7100_CLK_VENCBRG_MAIN>,
-					<&clkgen JH7100_CLK_VENC_BCLK>,
-					<&clkgen JH7100_CLK_VENC_CCLK>,
-					<&clkgen JH7100_CLK_VENC_APB>;
-			clock-names = "venc_axi", "vencbrg_main", "venc_bclk", "venc_cclk", "venc_apb";
-			resets = <&rstgen JH7100_RSTN_VENC_AXI>,
-					<&rstgen JH7100_RSTN_VENCBRG_MAIN>,
-					<&rstgen JH7100_RSTN_VENC_BCLK>,
-					<&rstgen JH7100_RSTN_VENC_CCLK>,
-					<&rstgen JH7100_RSTN_VENC_APB>;
-			reset-names = "venc_axi", "vencbrg_main", "venc_bclk", "venc_cclk", "venc_apb";
-			interrupts = <26>;
-		};
-
-		vpu_dec: vpu_dec@118f0000 {
-			compatible = "c&m,cm511-vpu";
-			reg = <0 0x118f0000 0 0x10000>;
-			clocks =<&clkgen JH7100_CLK_VDEC_AXI>,
-					<&clkgen JH7100_CLK_VDECBRG_MAIN>,
-					<&clkgen JH7100_CLK_VDEC_BCLK>,
-					<&clkgen JH7100_CLK_VDEC_CCLK>,
-					<&clkgen JH7100_CLK_VDEC_APB>;
-			clock-names = "vdec_axi", "vdecbrg_main", "vdec_bclk", "vdec_cclk", "vdec_apb";
-			resets = <&rstgen JH7100_RSTN_VDEC_AXI>,
-					<&rstgen JH7100_RSTN_VDECBRG_MAIN>,
-					<&rstgen JH7100_RSTN_VDEC_BCLK>,
-					<&rstgen JH7100_RSTN_VDEC_CCLK>,
-					<&rstgen JH7100_RSTN_VDEC_APB>;
-			reset-names = "vdec_axi", "vdecbrg_main", "vdec_bclk", "vdec_cclk", "vdec_apb";
-			interrupts = <23>;
-			//memory-region = <&vpu_reserved>;
-		};
-
-		jpu: coadj12@11900000 {
-			compatible = "cm,codaj12-jpu-1";
-			reg = <0x0 0x11900000 0x0 0x300>;
-			reg-names = "control";
-			clocks = <&clkgen JH7100_CLK_JPEG_APB>;
-			clock-names = "jpege";
-			interrupts = <24>;
-			memory-region = <&jpu_reserved>;
-		};
-
 		gpio: pinctrl@11910000 {
 			compatible = "starfive,jh7100-pinctrl";
 			reg = <0x0 0x11910000 0x0 0x10000>,
@@ -374,27 +285,6 @@
 				clocks = <&uartclk>, <&apb2clk>;
 				clock-names = "baudclk", "apb_pclk";
 				#phy-cells = <0>;
-		};
-
-		mipi_dsi: mipi@12100000 {
-			compatible = "cdns,dsi";
-			clocks = <&apb1clk>, <&apb2clk>;
-			clock-names = "dsi_p_clk", "dsi_sys_clk";
-			phys = <&mipi_dphy>;
-			phy-names = "dphy";
-			status = "okay";
-			reg = <0x0 0x12100000 0x0 0x10000>;
-			reg-names = "dsi";
-
-			port {
-				dsi_out_port: endpoint {
-					remote-endpoint = <&panel_dsi_port>;
-				};
-			};
-			mipi_panel: panel@0 {
-				//compatible = "";
-				status = "okay";
-			};
 		};
 
 		spi2: spi@12410000 {
@@ -451,32 +341,6 @@
 			status = "disabled";
 		};
 
-		i2c2: i2c@12450000 {
-			compatible = "snps,designware-i2c";
-			reg = <0x0 0x12450000 0x0 0x10000>;
-			clocks = <&clkgen JH7100_CLK_I2C2_CORE>,
-				 <&clkgen JH7100_CLK_I2C2_APB>;
-			clock-names = "ref", "pclk";
-			resets = <&rstgen JH7100_RSTN_I2C2_APB>;
-			interrupts = <74>;
-			#address-cells = <1>;
-			#size-cells = <0>;
-			status = "disabled";
-		};
-
-		i2c3: i2c@12460000 {
-			compatible = "snps,designware-i2c";
-			reg = <0x0 0x12460000 0x0 0x10000>;
-			clocks = <&clkgen JH7100_CLK_I2C3_CORE>,
-				 <&clkgen JH7100_CLK_I2C3_APB>;
-			clock-names = "ref", "pclk";
-			resets = <&rstgen JH7100_RSTN_I2C3_APB>;
-			interrupts = <75>;
-			#address-cells = <1>;
-			#size-cells = <0>;
-			status = "disabled";
-		};
-
 		watchdog@12480000 {
 			compatible = "starfive,si5-wdt";
 			reg = <0x0 0x12480000 0x0 0x10000>;
@@ -487,79 +351,6 @@
 				 <&rstgen JH7100_RSTN_WDT>;
 			reset-names = "wdtimer_apb", "wdt";
 			interrupts = <80>;
-		};
-
-		ptc: pwm@12490000 {
-			compatible = "starfive,pwm0";
-			reg = <0x0 0x12490000 0x0 0x10000>;
-			reg-names = "control";
-			clocks = <&clkgen JH7100_CLK_PWM_APB>;
-			#pwm-cells = <3>;
-			sifive,approx-period = <100000000>;
-			sifive,npwm = <8>;
-			status = "disabled";
-		};
-
-		sfctemp: tmon@124a0000 {
-			compatible = "starfive,jh7100-temp";
-			reg = <0x0 0x124a0000 0x0 0x10000>;
-			clocks = <&clkgen JH7100_CLK_TEMP_SENSE>,
-				 <&clkgen JH7100_CLK_TEMP_APB>;
-			clock-names = "sense", "bus";
-			resets = <&rstgen JH7100_RSTN_TEMP_SENSE>,
-				 <&rstgen JH7100_RSTN_TEMP_APB>;
-			reset-names = "sense", "bus";
-			interrupts = <122>;
-			#thermal-sensor-cells = <0>;
-		};
-
-		thermal-zones {
-			cpu-thermal {
-				polling-delay-passive = <250>;
-				polling-delay = <15000>;
-
-				thermal-sensors = <&sfctemp>;
-
-				cooling-maps {
-				};
-
-				trips {
-					cpu_alert0: cpu_alert0 {
-						/* milliCelsius */
-						temperature = <75000>;
-						hysteresis = <2000>;
-						type = "passive";
-					};
-
-					cpu_crit: cpu_crit {
-						/* milliCelsius */
-						temperature = <90000>;
-						hysteresis = <2000>;
-						type = "critical";
-					};
-				};
-			};
-		};
-
-		xrp@f0000000 {
-			compatible = "cdns,xrp";
-			reg = <0x0  0xf0000000 0x0 0x01ffffff>,
-			      <0x10 0x72000000 0x0 0x00001000>,
-			      <0x10 0x72001000 0x0 0x00fff000>,
-			      <0x0  0x124b0000 0x0 0x00010000>;
-			clocks = <&clkgen JH7100_CLK_VP6_CORE>;
-			interrupts = <27>, <28>;
-			firmware-name = "vp6_elf";
-			dsp-irq = <19 20>;
-			dsp-irq-src = <0x20 0x21>;
-			intc-irq-mode = <1>;
-			intc-irq = <0 1>;
-			#address-cells = <1>;
-			#size-cells = <1>;
-			ranges = <0x40000000 0x0  0x40000000 0x01000000>,
-				 <0xb0000000 0x10 0x70000000 0x3000000>;
-			dsp@0 {
-			};
 		};
 	};
 };
