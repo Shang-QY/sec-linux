@@ -675,6 +675,7 @@ EXPORT_SYMBOL_GPL(tty_port_install);
 int tty_port_open(struct tty_port *port, struct tty_struct *tty,
 							struct file *filp)
 {
+    printk("[SQY@%s] trace\r\n", __func__);
 	spin_lock_irq(&port->lock);
 	++port->count;
 	spin_unlock_irq(&port->lock);

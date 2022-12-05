@@ -187,7 +187,7 @@ static int uart_port_startup(struct tty_struct *tty, struct uart_state *state,
 	unsigned long flags;
 	unsigned long page;
 	int retval = 0;
-
+    printk("[SQY@%s] trace\r\n", __func__);
 	if (uport->type == PORT_UNKNOWN)
 		return 1;
 
@@ -217,7 +217,7 @@ static int uart_port_startup(struct tty_struct *tty, struct uart_state *state,
 		 */
 		free_page(page);
 	}
-
+    printk("[SQY@%s] trace before startup\r\n", __func__);
 	retval = uport->ops->startup(uport);
 	if (retval == 0) {
 		if (uart_console(uport) && uport->cons->cflag) {
@@ -257,7 +257,7 @@ static int uart_startup(struct tty_struct *tty, struct uart_state *state,
 {
 	struct tty_port *port = &state->port;
 	int retval;
-
+    printk("[SQY@%s] trace\r\n", __func__);
 	if (tty_port_initialized(port))
 		return 0;
 
@@ -979,6 +979,7 @@ static int uart_set_info(struct tty_struct *tty, struct tty_port *port,
 			uart_change_speed(tty, state, NULL);
 		}
 	} else {
+        printk("[SQY@%s] trace\r\n", __func__);
 		retval = uart_startup(tty, state, 1);
 		if (retval == 0)
 			tty_port_set_initialized(port, true);
@@ -1151,7 +1152,7 @@ static int uart_do_autoconfig(struct tty_struct *tty, struct uart_state *state)
 		 * a port is found.
 		 */
 		uport->ops->config_port(uport, flags);
-
+        printk("[SQY@%s] trace\r\n", __func__);
 		ret = uart_startup(tty, state, 1);
 		if (ret == 0)
 			tty_port_set_initialized(port, true);
@@ -1775,7 +1776,7 @@ static int uart_open(struct tty_struct *tty, struct file *filp)
 {
 	struct uart_state *state = tty->driver_data;
 	int retval;
-
+    printk("[SQY@%s] trace\r\n", __func__);
 	retval = tty_port_open(&state->port, tty, filp);
 	if (retval > 0)
 		retval = 0;
@@ -1788,7 +1789,7 @@ static int uart_port_activate(struct tty_port *port, struct tty_struct *tty)
 	struct uart_state *state = container_of(port, struct uart_state, port);
 	struct uart_port *uport;
 	int ret;
-
+    printk("[SQY@%s] trace\r\n", __func__);
 	uport = uart_port_check(state);
 	if (!uport || uport->flags & UPF_DEAD)
 		return -ENXIO;
@@ -2547,7 +2548,7 @@ int uart_register_driver(struct uart_driver *drv)
 {
 	struct tty_driver *normal;
 	int i, retval = -ENOMEM;
-
+    printk("[SQY@%s] trace\r\n", __func__);
 	BUG_ON(drv->state);
 
 	/*

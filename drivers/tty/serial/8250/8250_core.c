@@ -487,7 +487,7 @@ static void __init serial8250_isa_init_ports(void)
 	struct uart_8250_port *up;
 	static int first = 1;
 	int i, irqflag = 0;
-
+    printk("[SQY@%s] trace\r\n", __func__);
 	if (!first)
 		return;
 	first = 0;
@@ -675,7 +675,7 @@ static int __init univ8250_console_init(void)
 {
 	if (nr_uarts == 0)
 		return -ENODEV;
-
+    printk("[SQY@%s] trace\r\n", __func__);
 	serial8250_isa_init_ports();
 	register_console(&univ8250_console);
 	return 0;
@@ -705,7 +705,7 @@ static struct uart_driver serial8250_reg = {
 int __init early_serial_setup(struct uart_port *port)
 {
 	struct uart_port *p;
-
+    printk("[SQY@%s] trace\r\n", __func__);
 	if (port->line >= ARRAY_SIZE(serial8250_ports) || nr_uarts == 0)
 		return -ENODEV;
 
@@ -1157,7 +1157,7 @@ EXPORT_SYMBOL(serial8250_unregister_port);
 static int __init serial8250_init(void)
 {
 	int ret;
-
+    printk("[SQY@%s] trace\r\n", __func__);
 	if (nr_uarts == 0)
 		return -ENODEV;
 

@@ -1426,6 +1426,8 @@ static void __init do_pre_smp_initcalls(void)
 static int run_init_process(const char *init_filename)
 {
 	const char *const *p;
+    printk("[SQY@%s] trace\r\n", __func__);
+    dump_stack();
 
 	argv_init[0] = init_filename;
 	pr_info("Run %s as init process\n", init_filename);
@@ -1614,11 +1616,13 @@ static noinline void __init kernel_init_freeable(void)
 	/* Initialize page ext after all struct pages are initialized. */
 	page_ext_init();
 
+    // last one occur SQY trace
 	do_basic_setup();
 
 	kunit_run_all_tests();
 
 	wait_for_initramfs();
+    // uart SQY trace
 	console_on_rootfs();
 
 	/*

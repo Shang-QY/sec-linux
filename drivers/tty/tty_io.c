@@ -2159,6 +2159,8 @@ retry_open:
 	check_tty_count(tty, __func__);
 	tty_debug_hangup(tty, "opening (count=%d)\n", tty->count);
 
+    printk("[SQY@%s] trace\r\n", __func__);
+    dump_stack();
 	if (tty->ops->open)
 		retval = tty->ops->open(tty, filp);
 	else
@@ -2180,8 +2182,10 @@ retry_open:
 		/*
 		 * Need to reset f_op in case a hangup happened.
 		 */
-		if (tty_hung_up_p(filp))
+		if (tty_hung_up_p(filp)){
+            printk("[SQY@%s] trace tty\r\n", __func__);
 			filp->f_op = &tty_fops;
+        }
 		goto retry_open;
 	}
 	clear_bit(TTY_HUPPED, &tty->flags);
@@ -3181,6 +3185,7 @@ static int tty_cdev_add(struct tty_driver *driver, dev_t dev,
 		unsigned int index, unsigned int count)
 {
 	int err;
+    printk("[SQY@%s] trace tty\r\n", __func__);
 
 	/* init here, since reused cdevs cause crashes */
 	driver->cdevs[index] = cdev_alloc();
@@ -3521,6 +3526,7 @@ EXPORT_SYMBOL(tty_devnum);
 
 void tty_default_fops(struct file_operations *fops)
 {
+    printk("[SQY@%s] trace tty\r\n", __func__);
 	*fops = tty_fops;
 }
 
@@ -3608,6 +3614,7 @@ void console_sysfs_notify(void)
  */
 int __init tty_init(void)
 {
+    printk("[SQY@%s] trace tty\r\n", __func__);
 	tty_sysctl_init();
 	cdev_init(&tty_cdev, &tty_fops);
 	if (cdev_add(&tty_cdev, MKDEV(TTYAUX_MAJOR, 0), 1) ||

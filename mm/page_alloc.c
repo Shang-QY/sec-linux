@@ -8106,6 +8106,8 @@ unsigned long free_reserved_area(void *start, void *end, int poison, const char 
 	void *pos;
 	unsigned long pages = 0;
 
+    printk("[SQY@%s] trace\r\n", __func__);
+    dump_stack();
 	start = (void *)PAGE_ALIGN((unsigned long)start);
 	end = (void *)((unsigned long)end & PAGE_MASK);
 	for (pos = start; pos < end; pos += PAGE_SIZE, pages++) {

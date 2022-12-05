@@ -2166,6 +2166,7 @@ int serial8250_do_startup(struct uart_port *port)
 	unsigned char lsr, iir;
 	int retval;
 
+    printk("[SQY@%s] trace\r\n", __func__);
 	if (!port->fifosize)
 		port->fifosize = uart_config[port->type].fifo_size;
 	if (!up->tx_loadsz)
@@ -2284,6 +2285,7 @@ int serial8250_do_startup(struct uart_port *port)
 		}
 	}
 
+    printk("[SQY@%s] trace\r\n", __func__);
 	/* Check if we need to have shared IRQs */
 	if (port->irq && (up->port.flags & UPF_SHARE_IRQ))
 		up->port.irqflags |= IRQF_SHARED;
@@ -2333,7 +2335,7 @@ int serial8250_do_startup(struct uart_port *port)
 	retval = up->ops->setup_irq(up);
 	if (retval)
 		goto out;
-
+    // printk("[SQY@%s] trace\r\n", __func__);
 	/*
 	 * Now, initialize the UART
 	 */
@@ -2370,6 +2372,7 @@ int serial8250_do_startup(struct uart_port *port)
 	 * Do a quick test to see if we receive an interrupt when we enable
 	 * the TX irq.
 	 */
+    // printk("[SQY@%s] trace do test\r\n", __func__);
 	serial_port_out(port, UART_IER, UART_IER_THRI);
 	lsr = serial_port_in(port, UART_LSR);
 	iir = serial_port_in(port, UART_IIR);
@@ -2440,6 +2443,7 @@ EXPORT_SYMBOL_GPL(serial8250_do_startup);
 
 static int serial8250_startup(struct uart_port *port)
 {
+    printk("[SQY@%s] trace\r\n", __func__);
 	if (port->startup)
 		return port->startup(port);
 	return serial8250_do_startup(port);
@@ -3266,7 +3270,7 @@ static const struct uart_ops serial8250_pops = {
 void serial8250_init_port(struct uart_8250_port *up)
 {
 	struct uart_port *port = &up->port;
-
+    printk("[SQY@%s] trace set opt\r\n", __func__);
 	spin_lock_init(&port->lock);
 	port->ops = &serial8250_pops;
 	port->has_sysrq = IS_ENABLED(CONFIG_SERIAL_8250_CONSOLE);
