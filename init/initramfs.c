@@ -495,7 +495,7 @@ static char * __init unpack_to_rootfs(char *buf, unsigned long len)
 		}
 		this_header = 0;
 		decompress = decompress_method(buf, len, &compress_name);
-		pr_debug("Detected %s compressed data\n", compress_name);
+		printk("Detected %s compressed data\n", compress_name);
 		if (decompress) {
 			int res = decompress(buf, len, NULL, flush_buffer, NULL,
 				   &my_inptr, error);
@@ -671,10 +671,16 @@ static void __init populate_initrd_image(char *err)
 static void __init do_populate_rootfs(void *unused, async_cookie_t cookie)
 {
 	/* Load the built in initramfs */
+    printk("[SQY@%s] trace\r\n", __func__);
+    dump_stack();
+    printk("[SQY@%s] trace line %d\r\n", __func__, __LINE__);
 	char *err = unpack_to_rootfs(__initramfs_start, __initramfs_size);
-	if (err)
+    printk("[SQY@%s] trace line %d\r\n", __func__, __LINE__);
+	if (err){
+        printk("[SQY@%s] trace line %d\r\n", __func__, __LINE__);
+        printk("[SQY@%s] trace err: %s\r\n", __func__, err);
 		panic_show_mem("%s", err); /* Failed to decompress INTERNAL initramfs */
-
+    }
 	if (!initrd_start || IS_ENABLED(CONFIG_INITRAMFS_FORCE))
 		goto done;
 
@@ -697,12 +703,16 @@ done:
 	 * If the initrd region is overlapped with crashkernel reserved region,
 	 * free only memory that is not part of crashkernel region.
 	 */
+    printk("[SQY@%s] trace line %d\r\n", __func__, __LINE__);
 	if (!do_retain_initrd && initrd_start && !kexec_free_initrd())
 		free_initrd_mem(initrd_start, initrd_end);
-	initrd_start = 0;
+	printk("[SQY@%s] trace line %d\r\n", __func__, __LINE__);
+    initrd_start = 0;
 	initrd_end = 0;
 
+    printk("[SQY@%s] trace line %d\r\n", __func__, __LINE__);
 	flush_delayed_fput();
+    printk("[SQY@%s] trace line %d\r\n", __func__, __LINE__);
 }
 
 static ASYNC_DOMAIN_EXCLUSIVE(initramfs_domain);

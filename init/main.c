@@ -1407,10 +1407,19 @@ static void __init do_initcalls(void)
  */
 static void __init do_basic_setup(void)
 {
+    printk("[SQY@%s] trace cpuset_init_smp\r\n", __func__);
 	cpuset_init_smp();
+
+    printk("[SQY@%s] trace driver_init\r\n", __func__);
 	driver_init();
+
+    printk("[SQY@%s] trace init_irq_proc\r\n", __func__);
 	init_irq_proc();
+
+    printk("[SQY@%s] trace do_ctors\r\n", __func__);
 	do_ctors();
+
+    printk("[SQY@%s] trace do_initcalls\r\n", __func__);
 	do_initcalls();
 }
 
@@ -1619,10 +1628,14 @@ static noinline void __init kernel_init_freeable(void)
     // last one occur SQY trace
 	do_basic_setup();
 
+    printk("[SQY@%s] trace kunit_run_all_tests\r\n", __func__);
 	kunit_run_all_tests();
 
+    printk("[SQY@%s] trace wait_for_initramfs\r\n", __func__);
 	wait_for_initramfs();
+
     // uart SQY trace
+    printk("[SQY@%s] trace console_on_rootfs\r\n", __func__);
 	console_on_rootfs();
 
 	/*

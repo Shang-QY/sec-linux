@@ -120,13 +120,13 @@ static void async_run_entry_fn(struct work_struct *work)
 	ktime_t calltime;
 
 	/* 1) run (and print duration) */
-	pr_debug("calling  %lli_%pS @ %i\n", (long long)entry->cookie,
+	printk("calling  %lli_%pS @ %i\n", (long long)entry->cookie,
 		 entry->func, task_pid_nr(current));
 	calltime = ktime_get();
 
 	entry->func(entry->data, entry->cookie);
 
-	pr_debug("initcall %lli_%pS returned after %lld usecs\n",
+	printk("initcall %lli_%pS returned after %lld usecs\n",
 		 (long long)entry->cookie, entry->func,
 		 microseconds_since(calltime));
 
@@ -271,12 +271,13 @@ void async_synchronize_cookie_domain(async_cookie_t cookie, struct async_domain 
 {
 	ktime_t starttime;
 
-	pr_debug("async_waiting @ %i\n", task_pid_nr(current));
+	printk("async_waiting @ %i\n", task_pid_nr(current));
 	starttime = ktime_get();
+    printk("async_waiting @ %i ktime_get finish\n", task_pid_nr(current));
 
 	wait_event(async_done, lowest_in_progress(domain) >= cookie);
 
-	pr_debug("async_continuing @ %i after %lli usec\n", task_pid_nr(current),
+	printk("async_continuing @ %i after %lli usec\n", task_pid_nr(current),
 		 microseconds_since(starttime));
 }
 EXPORT_SYMBOL_GPL(async_synchronize_cookie_domain);
