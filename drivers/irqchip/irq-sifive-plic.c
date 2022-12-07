@@ -348,6 +348,9 @@ static int __init plic_init(struct device_node *node,
 	if (WARN_ON(!priv->irqdomain))
 		goto out_iounmap;
 
+    unsigned long sqyi = 0, j = 0;
+    unsigned long period = (1UL << 30);
+
 	for (i = 0; i < nr_contexts; i++) {
 		struct of_phandle_args parent;
 		irq_hw_number_t hwirq;
@@ -367,16 +370,17 @@ static int __init plic_init(struct device_node *node,
 
 		hartid = riscv_of_parent_hartid(parent.np);
 		if (hartid < 0) {
-			pr_warn("failed to parse hart ID for context %d.\n", i);
+			printk("failed to parse hart ID for context %d.\n", i);
 			continue;
 		}
 
 		cpu = riscv_hartid_to_cpuid(hartid);
 		if (cpu < 0) {
-			pr_warn("Invalid cpuid for context %d\n", i);
+			printk("Invalid cpuid for context %d\n", i);
 			continue;
 		}
 
+        printk("SQY@i: %d, cpu : %d, hartid: %d\r\n", i, cpu, hartid);
 		/* Find parent domain and register chained handler */
 		if (!plic_parent_irq && irq_find_host(parent.np)) {
 			plic_parent_irq = irq_of_parse_and_map(node, i);
@@ -392,7 +396,7 @@ static int __init plic_init(struct device_node *node,
 		 */
 		handler = per_cpu_ptr(&plic_handlers, cpu);
 		if (handler->present) {
-			pr_warn("handler already present for context %d.\n", i);
+			printk("handler already present for context %d.\n", i);
 			plic_set_threshold(handler, PLIC_DISABLE_THRESHOLD);
 			goto done;
 		}
@@ -406,6 +410,17 @@ static int __init plic_init(struct device_node *node,
 			priv->regs + ENABLE_BASE + i * ENABLE_PER_HART;
 		handler->priv = priv;
 done:
+    while (1) {
+        if(j == 2){
+            j = 0;
+            break;
+        }
+        if(i == period){
+            printk("\nTest payload running on line: %d, %lds\n", __LINE__, j++);
+            i = 0;
+        }
+        i++;
+    }
 		for (hwirq = 1; hwirq <= nr_irqs; hwirq++)
 			plic_toggle(handler, hwirq, 0);
 #if IS_ENABLED(CONFIG_SIFIVE_L2_IRQ_DISABLE)
@@ -414,6 +429,17 @@ done:
 		nr_handlers++;
 	}
 
+    // while (1) {
+    //     if(j == 5){
+    //         j = 0;
+    //         break;
+    //     }
+    //     if(i == period){
+    //         printk("\nTest payload running on line: %d, %lds\n", __LINE__, j++);
+    //         i = 0;
+    //     }
+    //     i++;
+    // }
 	/*
 	 * We can have multiple PLIC instances so setup cpuhp state only
 	 * when context handler for current/boot CPU is present.
@@ -426,6 +452,17 @@ done:
 		plic_cpuhp_setup_done = true;
 	}
 
+    // while (1) {
+    //     if(j == 5){
+    //         j = 0;
+    //         break;
+    //     }
+    //     if(i == period){
+    //         printk("\nTest payload running on line: %d, %lds\n", __LINE__, j++);
+    //         i = 0;
+    //     }
+    //     i++;
+    // }
 	pr_info("%pOFP: mapped %d interrupts with %d handlers for"
 		" %d contexts.\n", node, nr_irqs, nr_handlers, nr_contexts);
 	return 0;

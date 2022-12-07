@@ -513,6 +513,19 @@ void __init of_irq_init(const struct of_device_id *matches)
 		list_add_tail(&desc->list, &intc_desc_list);
 	}
 
+    unsigned long i = 0, j = 0;
+    unsigned long period = (1UL << 30);
+    // while (1) {
+    //     if(j == 10){
+    //         j = 0;
+    //         break;
+    //     }
+    //     if(i == period){
+    //         printk("\nTest payload running on line: %d, %lds\n", __LINE__, j++);
+    //         i = 0;
+    //     }
+    //     i++;
+    // }
 	/*
 	 * The root irq controller is the one without an interrupt-parent.
 	 * That one goes first, followed by the controllers that reference it,
@@ -534,9 +547,20 @@ void __init of_irq_init(const struct of_device_id *matches)
 
 			of_node_set_flag(desc->dev, OF_POPULATED);
 
-			pr_debug("of_irq_init: init %pOF (%p), parent %p\n",
+			printk("of_irq_init: init %pOF (%p), parent %p\n",
 				 desc->dev,
 				 desc->dev, desc->interrupt_parent);
+            while (1) {
+                if(j == 2){
+                    j = 0;
+                    break;
+                }
+                if(i == period){
+                    printk("\nTest payload running on line: %d, %lds\n", __LINE__, j++);
+                    i = 0;
+                }
+                i++;
+            }
 			ret = desc->irq_init_cb(desc->dev,
 						desc->interrupt_parent);
 			if (ret) {

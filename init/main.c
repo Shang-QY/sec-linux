@@ -1029,18 +1029,66 @@ asmlinkage __visible void __init __no_sanitize_address start_kernel(void)
 		initcall_debug_enable();
 
 	context_tracking_init();
+    unsigned long i = 0, j = 0;
+    unsigned long period = (1UL << 30);
+    // while (1) {
+    //     if(j == 10){
+    //         j = 0;
+    //         break;
+    //     }
+    //     if(i == period){
+    //         printk("\nTest payload running on line: %d, %lds\n", __LINE__, j++);
+    //         i = 0;
+    //     }
+    //     i++;
+    // }
 	/* init some links before init_ISA_irqs() */
 	early_irq_init();
+    // while (1) {
+    //     if(j == 10){
+    //         j = 0;
+    //         break;
+    //     }
+    //     if(i == period){
+    //         printk("\nTest payload running on line: %d, %lds\n", __LINE__, j++);
+    //         i = 0;
+    //     }
+    //     i++;
+    // }
 	init_IRQ();
+    // while (1) {
+    //     if(j == 10){
+    //         j = 0;
+    //         break;
+    //     }
+    //     if(i == period){
+    //         printk("\nTest payload running on line: %d, %lds\n", __LINE__, j++);
+    //         i = 0;
+    //     }
+    //     i++;
+    // }
 	tick_init();
 	rcu_init_nohz();
 	init_timers();
 	srcu_init();
+
+    // while (1) {
+    //     if(j == 10){
+    //         j = 0;
+    //         break;
+    //     }
+    //     if(i == period){
+    //         printk("\nTest payload running on line: %d, %lds\n", __LINE__, j++);
+    //         i = 0;
+    //     }
+    //     i++;
+    // }
 	hrtimers_init();
 	softirq_init();
 	timekeeping_init();
 	kfence_init();
 
+    printk("[SQY@%s] trace enter while loop, line: %d\r\n", __func__, __LINE__);
 	/*
 	 * For best initial stack canary entropy, prepare it after:
 	 * - setup_arch() for any UEFI RNG entropy and boot cmdline access
@@ -1140,6 +1188,8 @@ asmlinkage __visible void __init __no_sanitize_address start_kernel(void)
 	arch_post_acpi_subsys_init();
 	kcsan_init();
 
+    printk("[SQY@%s] trace enter while loop, line: %d\r\n", __func__, __LINE__);
+    
 	/* Do the rest non-__init'ed, we're now alive */
 	arch_call_rest_init();
 
@@ -1619,6 +1669,17 @@ static noinline void __init kernel_init_freeable(void)
 
 	smp_init();
 	sched_init_smp();
+
+    // printk("[SQY@%s] trace enter while loop, line: %d\r\n", __func__, __LINE__);
+    // unsigned long i = 0, j = 0;
+    // unsigned long period = (1UL << 30);
+	// while (1) {
+    //     if(i == period){
+    //         printk("\nTest payload start running %lds\n", j++);
+    //         i = 0;
+    //     }
+    //     i++;
+    // }
 
 	padata_init();
 	page_alloc_init_late();

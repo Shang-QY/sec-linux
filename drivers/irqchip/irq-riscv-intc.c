@@ -112,24 +112,67 @@ static int __init riscv_intc_init(struct device_node *node,
 	if (riscv_hartid_to_cpuid(hartid) != smp_processor_id())
 		return 0;
 
+    // unsigned long i = 0, j = 0;
+    // unsigned long period = (1UL << 30);
+    // while (1) {
+    //     if(j == 10){
+    //         j = 0;
+    //         break;
+    //     }
+    //     if(i == period){
+    //         printk("\nTest payload running on line: %d, %lds\n", __LINE__, j++);
+    //         i = 0;
+    //     }
+    //     i++;
+    // }
 	intc_domain = irq_domain_add_linear(node, BITS_PER_LONG,
 					    &riscv_intc_domain_ops, NULL);
 	if (!intc_domain) {
 		pr_err("unable to add IRQ domain\n");
 		return -ENXIO;
 	}
-
+    // while (1) {
+    //     if(j == 10){
+    //         j = 0;
+    //         break;
+    //     }
+    //     if(i == period){
+    //         printk("\nTest payload running on line: %d, %lds\n", __LINE__, j++);
+    //         i = 0;
+    //     }
+    //     i++;
+    // }
 	rc = set_handle_irq(&riscv_intc_irq);
 	if (rc) {
 		pr_err("failed to set irq handler\n");
 		return rc;
 	}
-
+    // while (1) {
+    //     if(j == 10){
+    //         j = 0;
+    //         break;
+    //     }
+    //     if(i == period){
+    //         printk("\nTest payload running on line: %d, %lds\n", __LINE__, j++);
+    //         i = 0;
+    //     }
+    //     i++;
+    // }
 	cpuhp_setup_state(CPUHP_AP_IRQ_RISCV_STARTING,
 			  "irqchip/riscv/intc:starting",
 			  riscv_intc_cpu_starting,
 			  riscv_intc_cpu_dying);
-
+    // while (1) {
+    //     if(j == 10){
+    //         j = 0;
+    //         break;
+    //     }
+    //     if(i == period){
+    //         printk("\nTest payload running on line: %d, %lds\n", __LINE__, j++);
+    //         i = 0;
+    //     }
+    //     i++;
+    // }
 	pr_info("%d local interrupts mapped\n", BITS_PER_LONG);
 
 	return 0;
