@@ -309,21 +309,21 @@ static int jh7100_clk_enable(struct clk_hw *hw)
 
 static void jh7100_clk_disable(struct clk_hw *hw)
 {
-	unsigned long sqyi = 0, sqyj = 0;
-    unsigned long period = (1UL << 30);
-    printk("[SQY@%s] trace enter while loop, line: %d\r\n", __func__, __LINE__);
-    dump_stack();
-    while (1) {
-        if(sqyj == 6){
-            sqyj = 0;
-            break;
-        }
-        if(sqyi == period){
-            printk("\n[SQY@%s] payload running on line: %d, %lds\n", __func__, __LINE__, sqyj++);
-            sqyi = 0;
-        }
-        sqyi++;
-    }
+	// unsigned long sqyi = 0, sqyj = 0;
+    // unsigned long period = (1UL << 30);
+    // printk("[SQY@%s] trace enter while loop, line: %d\r\n", __func__, __LINE__);
+    // dump_stack();
+    // while (1) {
+    //     if(sqyj == 6){
+    //         sqyj = 0;
+    //         break;
+    //     }
+    //     if(sqyi == period){
+    //         printk("\n[SQY@%s] payload running on line: %d, %lds\n", __func__, __LINE__, sqyj++);
+    //         sqyi = 0;
+    //     }
+    //     sqyi++;
+    // }
     struct jh7100_clk *clk = jh7100_clk_from(hw);
 
 	jh7100_clk_reg_rmw(clk, JH7100_CLK_ENABLE, 0);

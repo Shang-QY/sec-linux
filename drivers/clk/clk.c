@@ -1301,53 +1301,53 @@ static int __init clk_disable_unused(void)
 
 	clk_prepare_lock();
 
-    unsigned long sqyi = 0, sqyj = 0;
-    unsigned long period = (1UL << 30);
-    printk("[SQY@%s] trace enter while loop, line: %d\r\n", __func__, __LINE__);
-    dump_stack();
-    while (1) {
-        if(sqyj == 6){
-            sqyj = 0;
-            break;
-        }
-        if(sqyi == period){
-            printk("\n[SQY@%s] payload running on line: %d, %lds\n", __func__, __LINE__, sqyj++);
-            sqyi = 0;
-        }
-        sqyi++;
-    }
+    // unsigned long sqyi = 0, sqyj = 0;
+    // unsigned long period = (1UL << 30);
+    // printk("[SQY@%s] trace enter while loop, line: %d\r\n", __func__, __LINE__);
+    // dump_stack();
+    // while (1) {
+    //     if(sqyj == 6){
+    //         sqyj = 0;
+    //         break;
+    //     }
+    //     if(sqyi == period){
+    //         printk("\n[SQY@%s] payload running on line: %d, %lds\n", __func__, __LINE__, sqyj++);
+    //         sqyi = 0;
+    //     }
+    //     sqyi++;
+    // }
 
 	hlist_for_each_entry(core, &clk_root_list, child_node)
 		clk_disable_unused_subtree(core);
 
-    printk("[SQY@%s] trace enter while loop, line: %d\r\n", __func__, __LINE__);
-    dump_stack();
-    while (1) {
-        if(sqyj == 6){
-            sqyj = 0;
-            break;
-        }
-        if(sqyi == period){
-            printk("\n[SQY@%s] payload running on line: %d, %lds\n", __func__, __LINE__, sqyj++);
-            sqyi = 0;
-        }
-        sqyi++;
-    }
+    // printk("[SQY@%s] trace enter while loop, line: %d\r\n", __func__, __LINE__);
+    // dump_stack();
+    // while (1) {
+    //     if(sqyj == 6){
+    //         sqyj = 0;
+    //         break;
+    //     }
+    //     if(sqyi == period){
+    //         printk("\n[SQY@%s] payload running on line: %d, %lds\n", __func__, __LINE__, sqyj++);
+    //         sqyi = 0;
+    //     }
+    //     sqyi++;
+    // }
 
 	hlist_for_each_entry(core, &clk_orphan_list, child_node)
 		clk_disable_unused_subtree(core);
 
-    while (1) {
-        if(sqyj == 6){
-            sqyj = 0;
-            break;
-        }
-        if(sqyi == period){
-            printk("\n[SQY@%s] payload running on line: %d, %lds\n", __func__, __LINE__, sqyj++);
-            sqyi = 0;
-        }
-        sqyi++;
-    }
+    // while (1) {
+    //     if(sqyj == 6){
+    //         sqyj = 0;
+    //         break;
+    //     }
+    //     if(sqyi == period){
+    //         printk("\n[SQY@%s] payload running on line: %d, %lds\n", __func__, __LINE__, sqyj++);
+    //         sqyi = 0;
+    //     }
+    //     sqyi++;
+    // }
 	if (clk_ignore_unused) {
 		pr_warn("clk: Not disabling unused clocks\n");
 		return 0;
@@ -1361,19 +1361,19 @@ static int __init clk_disable_unused(void)
 
 	clk_prepare_unlock();
 
-    printk("[SQY@%s] trace enter while loop, line: %d\r\n", __func__, __LINE__);
-    dump_stack();
-    while (1) {
-        if(sqyj == 3){
-            sqyj = 0;
-            break;
-        }
-        if(sqyi == period){
-            printk("\n[SQY@%s] payload running on line: %d, %lds\n", __func__, __LINE__, sqyj++);
-            sqyi = 0;
-        }
-        sqyi++;
-    }
+    // printk("[SQY@%s] trace enter while loop, line: %d\r\n", __func__, __LINE__);
+    // dump_stack();
+    // while (1) {
+    //     if(sqyj == 3){
+    //         sqyj = 0;
+    //         break;
+    //     }
+    //     if(sqyi == period){
+    //         printk("\n[SQY@%s] payload running on line: %d, %lds\n", __func__, __LINE__, sqyj++);
+    //         sqyi = 0;
+    //     }
+    //     sqyi++;
+    // }
 	return 0;
 }
 late_initcall_sync(clk_disable_unused);

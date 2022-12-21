@@ -64,21 +64,21 @@ static void efi_power_off(void)
 
 static int __init efi_shutdown_init(void)
 {
-	unsigned long sqyi = 0, sqyj = 0;
-    unsigned long period = (1UL << 30);
-    printk("[SQY@%s] trace enter while loop, line: %d\r\n", __func__, __LINE__);
-    dump_stack();
-    while (1) {
-        if(sqyj == 3){
-            sqyj = 0;
-            break;
-        }
-        if(sqyi == period){
-            printk("\n[SQY@%s] payload running on line: %d, %lds\n", __func__, __LINE__, sqyj++);
-            sqyi = 0;
-        }
-        sqyi++;
-    }
+	// unsigned long sqyi = 0, sqyj = 0;
+    // unsigned long period = (1UL << 30);
+    // printk("[SQY@%s] trace enter while loop, line: %d\r\n", __func__, __LINE__);
+    // dump_stack();
+    // while (1) {
+    //     if(sqyj == 3){
+    //         sqyj = 0;
+    //         break;
+    //     }
+    //     if(sqyi == period){
+    //         printk("\n[SQY@%s] payload running on line: %d, %lds\n", __func__, __LINE__, sqyj++);
+    //         sqyi = 0;
+    //     }
+    //     sqyi++;
+    // }
     
     if (!efi_rt_services_supported(EFI_RT_SUPPORTED_RESET_SYSTEM))
 		return -ENODEV;
@@ -88,19 +88,19 @@ static int __init efi_shutdown_init(void)
 		pm_power_off = efi_power_off;
 	}
 
-    printk("[SQY@%s] trace enter while loop, line: %d\r\n", __func__, __LINE__);
-    dump_stack();
-    while (1) {
-        if(sqyj == 3){
-            sqyj = 0;
-            break;
-        }
-        if(sqyi == period){
-            printk("\n[SQY@%s] payload running on line: %d, %lds\n", __func__, __LINE__, sqyj++);
-            sqyi = 0;
-        }
-        sqyi++;
-    }
+    // printk("[SQY@%s] trace enter while loop, line: %d\r\n", __func__, __LINE__);
+    // dump_stack();
+    // while (1) {
+    //     if(sqyj == 3){
+    //         sqyj = 0;
+    //         break;
+    //     }
+    //     if(sqyi == period){
+    //         printk("\n[SQY@%s] payload running on line: %d, %lds\n", __func__, __LINE__, sqyj++);
+    //         sqyi = 0;
+    //     }
+    //     sqyi++;
+    // }
 	return 0;
 }
 late_initcall(efi_shutdown_init);

@@ -1706,18 +1706,18 @@ static noinline void __init kernel_init_freeable(void)
 
     // last one occur SQY trace
 	do_basic_setup();
-    printk("[SQY@%s] trace enter while loop, line: %d\r\n", __func__, __LINE__);
-    while (1) {
-        if(sqyj == 6){
-            sqyj = 0;
-            break;
-        }
-        if(sqyi == period){
-            printk("\nTest payload running on line: %d, %lds\n", __LINE__, sqyj++);
-            sqyi = 0;
-        }
-        sqyi++;
-    }
+    // printk("[SQY@%s] trace enter while loop, line: %d\r\n", __func__, __LINE__);
+    // while (1) {
+    //     if(sqyj == 6){
+    //         sqyj = 0;
+    //         break;
+    //     }
+    //     if(sqyi == period){
+    //         printk("\nTest payload running on line: %d, %lds\n", __LINE__, sqyj++);
+    //         sqyi = 0;
+    //     }
+    //     sqyi++;
+    // }
     printk("[SQY@%s] trace kunit_run_all_tests\r\n", __func__);
 	kunit_run_all_tests();
 

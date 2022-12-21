@@ -101,21 +101,21 @@ static inline void plic_irq_toggle(const struct cpumask *mask,
 	int cpu;
 	struct plic_priv *priv = irq_data_get_irq_chip_data(d);
 
-    unsigned long sqyi = 0, sqyj = 0;
-    unsigned long period = (1UL << 30);
-    printk("[SQY@%s] trace\r\n", __func__);
-    dump_stack();
-    while (1) {
-        if(sqyj == 2){
-            sqyj = 0;
-            break;
-        }
-        if(sqyi == period){
-            printk("\nTest payload running on line: %d, %lds\n", __LINE__, sqyj++);
-            sqyi = 0;
-        }
-        sqyi++;
-    }
+    // unsigned long sqyi = 0, sqyj = 0;
+    // unsigned long period = (1UL << 30);
+    // printk("[SQY@%s] trace\r\n", __func__);
+    // dump_stack();
+    // while (1) {
+    //     if(sqyj == 2){
+    //         sqyj = 0;
+    //         break;
+    //     }
+    //     if(sqyi == period){
+    //         printk("\nTest payload running on line: %d, %lds\n", __LINE__, sqyj++);
+    //         sqyi = 0;
+    //     }
+    //     sqyi++;
+    // }
     
 	writel(enable, priv->regs + PRIORITY_BASE + d->hwirq * PRIORITY_PER_ID);
 	for_each_cpu(cpu, mask) {

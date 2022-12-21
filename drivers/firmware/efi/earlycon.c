@@ -43,37 +43,37 @@ early_initcall(efi_earlycon_remap_fb);
 static int __init efi_earlycon_unmap_fb(void)
 {
 	/* unmap the bootconsole fb unless keep_bootcon has left it enabled */
-	unsigned long sqyi = 0, sqyj = 0;
-    unsigned long period = (1UL << 30);
-    printk("[SQY@%s] trace enter while loop, line: %d\r\n", __func__, __LINE__);
-    dump_stack();
-    while (1) {
-        if(sqyj == 3){
-            sqyj = 0;
-            break;
-        }
-        if(sqyi == period){
-            printk("\n[SQY@%s] payload running on line: %d, %lds\n", __func__, __LINE__, sqyj++);
-            sqyi = 0;
-        }
-        sqyi++;
-    }
+	// unsigned long sqyi = 0, sqyj = 0;
+    // unsigned long period = (1UL << 30);
+    // printk("[SQY@%s] trace enter while loop, line: %d\r\n", __func__, __LINE__);
+    // dump_stack();
+    // while (1) {
+    //     if(sqyj == 3){
+    //         sqyj = 0;
+    //         break;
+    //     }
+    //     if(sqyi == period){
+    //         printk("\n[SQY@%s] payload running on line: %d, %lds\n", __func__, __LINE__, sqyj++);
+    //         sqyi = 0;
+    //     }
+    //     sqyi++;
+    // }
     if (efi_fb && !(earlycon_console->flags & CON_ENABLED))
 		memunmap(efi_fb);
 
-    printk("[SQY@%s] trace enter while loop, line: %d\r\n", __func__, __LINE__);
-    dump_stack();
-    while (1) {
-        if(sqyj == 3){
-            sqyj = 0;
-            break;
-        }
-        if(sqyi == period){
-            printk("\n[SQY@%s] payload running on line: %d, %lds\n", __func__, __LINE__, sqyj++);
-            sqyi = 0;
-        }
-        sqyi++;
-    }
+    // printk("[SQY@%s] trace enter while loop, line: %d\r\n", __func__, __LINE__);
+    // dump_stack();
+    // while (1) {
+    //     if(sqyj == 3){
+    //         sqyj = 0;
+    //         break;
+    //     }
+    //     if(sqyi == period){
+    //         printk("\n[SQY@%s] payload running on line: %d, %lds\n", __func__, __LINE__, sqyj++);
+    //         sqyi = 0;
+    //     }
+    //     sqyi++;
+    // }
 	return 0;
 }
 late_initcall(efi_earlycon_unmap_fb);

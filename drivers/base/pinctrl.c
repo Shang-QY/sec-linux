@@ -61,21 +61,21 @@ int pinctrl_bind_pins(struct device *dev)
 		goto cleanup_get;
 	}
 
-    unsigned long sqyi = 0, sqyj = 0;
-    unsigned long period = (1UL << 30);
-    printk("[SQY@%s] trace enter while loop, line: %d\r\n", __func__, __LINE__);
-    dump_stack();
-    while (1) {
-        if(sqyj == 3){
-            sqyj = 0;
-            break;
-        }
-        if(sqyi == period){
-            printk("\n[SQY@%s] payload running on line: %d, %lds\n", __func__, __LINE__, sqyj++);
-            sqyi = 0;
-        }
-        sqyi++;
-    }
+    // unsigned long sqyi = 0, sqyj = 0;
+    // unsigned long period = (1UL << 30);
+    // printk("[SQY@%s] trace enter while loop, line: %d\r\n", __func__, __LINE__);
+    // dump_stack();
+    // while (1) {
+    //     if(sqyj == 3){
+    //         sqyj = 0;
+    //         break;
+    //     }
+    //     if(sqyi == period){
+    //         printk("\n[SQY@%s] payload running on line: %d, %lds\n", __func__, __LINE__, sqyj++);
+    //         sqyi = 0;
+    //     }
+    //     sqyi++;
+    // }
 
 #ifdef CONFIG_PM
 	/*
