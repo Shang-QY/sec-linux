@@ -1036,6 +1036,23 @@ asmlinkage __visible void __init __no_sanitize_address start_kernel(void)
 	rcu_init_nohz();
 	init_timers();
 	srcu_init();
+
+    // unsigned long sqyi = 0, sqyj = 0;
+    // unsigned long period = (1UL << 30);
+    // printk("[SQY@%s] trace\r\n", __func__);
+    // dump_stack();
+    // while (1) {
+    //     if(sqyj == 6){
+    //         sqyj = 0;
+    //         break;
+    //     }
+    //     if(sqyi == period){
+    //         printk("\nTest payload running on line: %d, %lds\n", __LINE__, sqyj++);
+    //         sqyi = 0;
+    //     }
+    //     sqyi++;
+    // }
+
 	hrtimers_init();
 	softirq_init();
 	timekeeping_init();
@@ -1373,10 +1390,29 @@ static void __init do_initcall_level(int level, char *command_line)
 		   __stop___param - __start___param,
 		   level, level,
 		   NULL, ignore_unknown_bootoption);
+    
+    unsigned long sqyi = 0, sqyj = 0, w = 0;
+    unsigned long period = (1UL << 30);
+    printk("[SQY@%s] trace enter while loop, line: %d\r\n", __func__, __LINE__);
 
 	trace_initcall_level(initcall_level_names[level]);
-	for (fn = initcall_levels[level]; fn < initcall_levels[level+1]; fn++)
-		do_one_initcall(initcall_from_entry(fn));
+	for (fn = initcall_levels[level]; fn < initcall_levels[level+1]; fn++){
+		printk("[SQY@%s] trace fn: %d\n", __func__, w++);
+        do_one_initcall(initcall_from_entry(fn));
+        // if(level > 4){
+        //     while (1) {
+        //         if(sqyj == 1){
+        //             sqyj = 0;
+        //             break;
+        //         }
+        //         if(sqyi == period){
+        //             printk("\n[SQY@%s] payload running on line: %d, %lds\n", __func__, __LINE__, sqyj++);
+        //             sqyi = 0;
+        //         }
+        //         sqyi++;
+        //     }
+        // }
+    }
 }
 
 static void __init do_initcalls(void)
@@ -1384,6 +1420,8 @@ static void __init do_initcalls(void)
 	int level;
 	size_t len = strlen(saved_command_line) + 1;
 	char *command_line;
+    unsigned long sqyi = 0, sqyj = 0;
+    unsigned long period = (1UL << 30);
 
 	command_line = kzalloc(len, GFP_KERNEL);
 	if (!command_line)
@@ -1392,7 +1430,22 @@ static void __init do_initcalls(void)
 	for (level = 0; level < ARRAY_SIZE(initcall_levels) - 1; level++) {
 		/* Parser modifies command_line, restore it each time */
 		strcpy(command_line, saved_command_line);
+        printk("[SQY@%s] trace level: %d, command line: %s\r\n", __func__, level, command_line);
+        
 		do_initcall_level(level, command_line);
+        // if(level > 4){
+        //     while (1) {
+        //         if(sqyj == 1){
+        //             sqyj = 0;
+        //             break;
+        //         }
+        //         if(sqyi == period){
+        //             printk("\n[SQY@%s] Test payload running on line: %d, %lds\n", __func__, __LINE__, sqyj++);
+        //             sqyi = 0;
+        //         }
+        //         sqyi++;
+        //     }
+        // }
 	}
 
 	kfree(command_line);
@@ -1599,7 +1652,20 @@ static noinline void __init kernel_init_freeable(void)
 {
 	/* Now the scheduler is fully set up and can do blocking allocations */
 	gfp_allowed_mask = __GFP_BITS_MASK;
-
+    unsigned long sqyi = 0, sqyj = 0;
+    unsigned long period = (1UL << 30);
+    // printk("[SQY@%s] trace enter while loop, line: %d\r\n", __func__, __LINE__);
+    // while (1) {
+    //     if(sqyj == 6){
+    //         sqyj = 0;
+    //         break;
+    //     }
+    //     if(sqyi == period){
+    //         printk("\nTest payload running on line: %d, %lds\n", __LINE__, sqyj++);
+    //         sqyi = 0;
+    //     }
+    //     sqyi++;
+    // }
 	/*
 	 * init can allocate pages on any node
 	 */
@@ -1620,6 +1686,19 @@ static noinline void __init kernel_init_freeable(void)
 	smp_init();
 	sched_init_smp();
 
+    // printk("[SQY@%s] trace enter while loop, line: %d\r\n", __func__, __LINE__);
+    // while (1) {
+    //     if(sqyj == 6){
+    //         sqyj = 0;
+    //         break;
+    //     }
+    //     if(sqyi == period){
+    //         printk("\nTest payload running on line: %d, %lds\n", __LINE__, sqyj++);
+    //         sqyi = 0;
+    //     }
+    //     sqyi++;
+    // }
+
 	padata_init();
 	page_alloc_init_late();
 	/* Initialize page ext after all struct pages are initialized. */
@@ -1627,7 +1706,18 @@ static noinline void __init kernel_init_freeable(void)
 
     // last one occur SQY trace
 	do_basic_setup();
-
+    printk("[SQY@%s] trace enter while loop, line: %d\r\n", __func__, __LINE__);
+    while (1) {
+        if(sqyj == 6){
+            sqyj = 0;
+            break;
+        }
+        if(sqyi == period){
+            printk("\nTest payload running on line: %d, %lds\n", __LINE__, sqyj++);
+            sqyi = 0;
+        }
+        sqyi++;
+    }
     printk("[SQY@%s] trace kunit_run_all_tests\r\n", __func__);
 	kunit_run_all_tests();
 

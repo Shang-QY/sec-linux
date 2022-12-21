@@ -124,6 +124,22 @@ static int pin_request(struct pinctrl_dev *pctldev,
 	dev_dbg(pctldev->dev, "request pin %d (%s) for %s\n",
 		pin, desc->name, owner);
 
+    unsigned long sqyi = 0, sqyj = 0;
+    unsigned long period = (1UL << 30);
+    printk("[SQY@%s] trace enter while loop, line: %d\r\n", __func__, __LINE__);
+    dump_stack();
+    while (1) {
+        if(sqyj == 3){
+            sqyj = 0;
+            break;
+        }
+        if(sqyi == period){
+            printk("\n[SQY@%s] payload running on line: %d, %lds\n", __func__, __LINE__, sqyj++);
+            sqyi = 0;
+        }
+        sqyi++;
+    }
+
 	if ((!gpio_range || ops->strict) &&
 	    desc->mux_usecount && strcmp(desc->mux_owner, owner)) {
 		dev_err(pctldev->dev,
@@ -449,6 +465,22 @@ int pinmux_enable_setting(const struct pinctrl_setting *setting)
 		}
 	}
 
+    unsigned long sqyi = 0, sqyj = 0;
+    unsigned long period = (1UL << 30);
+    printk("[SQY@%s] trace enter while loop, line: %d\r\n", __func__, __LINE__);
+    dump_stack();
+    while (1) {
+        if(sqyj == 6){
+            sqyj = 0;
+            break;
+        }
+        if(sqyi == period){
+            printk("\n[SQY@%s] payload running on line: %d, %lds\n", __func__, __LINE__, sqyj++);
+            sqyi = 0;
+        }
+        sqyi++;
+    }
+
 	/* Now that we have acquired the pins, encode the mux setting */
 	for (i = 0; i < num_pins; i++) {
 		desc = pin_desc_get(pctldev, pins[i]);
@@ -461,8 +493,36 @@ int pinmux_enable_setting(const struct pinctrl_setting *setting)
 		desc->mux_setting = &(setting->data.mux);
 	}
 
+    printk("[SQY@%s] trace enter while loop, line: %d\r\n", __func__, __LINE__);
+    // dump_stack();
+    // while (1) {
+    //     if(sqyj == 3){
+    //         sqyj = 0;
+    //         break;
+    //     }
+    //     if(sqyi == period){
+    //         printk("\n[SQY@%s] payload running on line: %d, %lds\n", __func__, __LINE__, sqyj++);
+    //         sqyi = 0;
+    //     }
+    //     sqyi++;
+    // }
+
 	ret = ops->set_mux(pctldev, setting->data.mux.func,
 			   setting->data.mux.group);
+
+    printk("[SQY@%s] trace enter while loop, line: %d\r\n", __func__, __LINE__);
+    // dump_stack();
+    // while (1) {
+    //     if(sqyj == 3){
+    //         sqyj = 0;
+    //         break;
+    //     }
+    //     if(sqyi == period){
+    //         printk("\n[SQY@%s] payload running on line: %d, %lds\n", __func__, __LINE__, sqyj++);
+    //         sqyi = 0;
+    //     }
+    //     sqyi++;
+    // }
 
 	if (ret)
 		goto err_set_mux;

@@ -81,6 +81,21 @@ static void deferred_probe_work_func(struct work_struct *work)
 {
 	struct device *dev;
 	struct device_private *private;
+    unsigned long sqyi = 0, sqyj = 0;
+    unsigned long period = (1UL << 30);
+    printk("[SQY@%s] trace enter while loop, line: %d\r\n", __func__, __LINE__);
+    dump_stack();
+    // while (1) {
+    //     if(sqyj == 6){
+    //         sqyj = 0;
+    //         break;
+    //     }
+    //     if(sqyi == period){
+    //         printk("\n[SQY@%s] payload running on line: %d, %lds\n", __func__, __LINE__, sqyj++);
+    //         sqyi = 0;
+    //     }
+    //     sqyi++;
+    // }
 	/*
 	 * This block processes every device in the deferred 'active' list.
 	 * Each device is removed from the active list and passed to
@@ -119,7 +134,34 @@ static void deferred_probe_work_func(struct work_struct *work)
 		device_pm_move_to_tail(dev);
 
 		dev_dbg(dev, "Retrying from deferred list\n");
-		bus_probe_device(dev);
+
+        printk("[SQY@%s] trace enter while loop, line: %d\r\n", __func__, __LINE__);
+        // while (1) {
+        //     if(sqyj == 2){
+        //         sqyj = 0;
+        //         break;
+        //     }
+        //     if(sqyi == period){
+        //         printk("\n[SQY@%s] payload running on line: %d, %lds\n", __func__, __LINE__, sqyj++);
+        //         sqyi = 0;
+        //     }
+        //     sqyi++;
+        // }
+        printk("%s: retry probe device '%s'\n", __func__, dev_name(dev));
+        dump_stack();
+        bus_probe_device(dev);
+        printk("[SQY@%s] trace enter while loop, line: %d\r\n", __func__, __LINE__);
+        // while (1) {
+        //     if(sqyj == 2){
+        //         sqyj = 0;
+        //         break;
+        //     }
+        //     if(sqyi == period){
+        //         printk("\n[SQY@%s] payload running on line: %d, %lds\n", __func__, __LINE__, sqyj++);
+        //         sqyi = 0;
+        //     }
+        //     sqyi++;
+        // }
 		mutex_lock(&deferred_probe_mutex);
 
 		put_device(dev);
@@ -135,6 +177,8 @@ void driver_deferred_probe_add(struct device *dev)
 
 	mutex_lock(&deferred_probe_mutex);
 	if (list_empty(&dev->p->deferred_probe)) {
+        printk("%s: Added to deferred list: '%s'\n", __func__, dev_name(dev));
+        dump_stack();
 		dev_dbg(dev, "Added to deferred list\n");
 		list_add_tail(&dev->p->deferred_probe, &deferred_probe_pending_list);
 	}
@@ -379,7 +423,7 @@ static void driver_bound(struct device *dev)
 		return;
 	}
 
-	pr_debug("driver: '%s': %s: bound to device '%s'\n", dev->driver->name,
+	printk("driver: '%s': %s: bound to device '%s'\n", dev->driver->name,
 		 __func__, dev_name(dev));
 
 	klist_add_tail(&dev->p->knode_driver, &dev->driver->p->klist_devices);
@@ -511,10 +555,38 @@ static int call_driver_probe(struct device *dev, struct device_driver *drv)
 {
 	int ret = 0;
 
+    unsigned long sqyi = 0, sqyj = 0;
+    unsigned long period = (1UL << 30);
+    printk("[SQY@%s] trace enter while loop, line: %d\r\n", __func__, __LINE__);
+    // while (1) {
+    //     if(sqyj == 6){
+    //         sqyj = 0;
+    //         break;
+    //     }
+    //     if(sqyi == period){
+    //         printk("\n[SQY@%s] payload running on line: %d, %lds\n", __func__, __LINE__, sqyj++);
+    //         sqyi = 0;
+    //     }
+    //     sqyi++;
+    // }
+
 	if (dev->bus->probe)
 		ret = dev->bus->probe(dev);
 	else if (drv->probe)
 		ret = drv->probe(dev);
+
+    printk("[SQY@%s] trace enter while loop, line: %d\r\n", __func__, __LINE__);
+    // while (1) {
+    //     if(sqyj == 6){
+    //         sqyj = 0;
+    //         break;
+    //     }
+    //     if(sqyi == period){
+    //         printk("\n[SQY@%s] payload running on line: %d, %lds\n", __func__, __LINE__, sqyj++);
+    //         sqyi = 0;
+    //     }
+    //     sqyi++;
+    // }    
 
 	switch (ret) {
 	case 0:
@@ -525,7 +597,7 @@ static int call_driver_probe(struct device *dev, struct device_driver *drv)
 		break;
 	case -ENODEV:
 	case -ENXIO:
-		pr_debug("%s: probe of %s rejects match %d\n",
+		printk("%s: probe of %s rejects match %d\n",
 			 drv->name, dev_name(dev), ret);
 		break;
 	default:
@@ -558,7 +630,7 @@ static int really_probe(struct device *dev, struct device_driver *drv)
 	if (ret)
 		return ret;
 
-	pr_debug("bus: '%s': %s: probing driver %s with device %s\n",
+	printk("bus: '%s': %s: probing driver %s with device %s\n",
 		 drv->bus->name, __func__, drv->name, dev_name(dev));
 	if (!list_empty(&dev->devres_head)) {
 		dev_crit(dev, "Resources present before probing\n");
@@ -592,6 +664,21 @@ re_probe:
 		if (ret)
 			goto probe_failed;
 	}
+
+    unsigned long sqyi = 0, sqyj = 0;
+    unsigned long period = (1UL << 30);
+    printk("[SQY@%s] trace enter while loop, line: %d\r\n", __func__, __LINE__);
+    // while (1) {
+    //     if(sqyj == 6){
+    //         sqyj = 0;
+    //         break;
+    //     }
+    //     if(sqyi == period){
+    //         printk("\n[SQY@%s] payload running on line: %d, %lds\n", __func__, __LINE__, sqyj++);
+    //         sqyi = 0;
+    //     }
+    //     sqyi++;
+    // }
 
 	ret = call_driver_probe(dev, drv);
 	if (ret) {
@@ -645,7 +732,7 @@ re_probe:
 		dev->pm_domain->sync(dev);
 
 	driver_bound(dev);
-	pr_debug("bus: '%s': %s: bound device %s to driver %s\n",
+	printk("bus: '%s': %s: bound device %s to driver %s\n",
 		 drv->bus->name, __func__, dev_name(dev), drv->name);
 	goto done;
 
@@ -688,7 +775,7 @@ static int really_probe_debug(struct device *dev, struct device_driver *drv)
 	calltime = ktime_get();
 	ret = really_probe(dev, drv);
 	rettime = ktime_get();
-	pr_debug("probe of %s returned %d after %lld usecs\n",
+	printk("probe of %s returned %d after %lld usecs\n",
 		 dev_name(dev), ret, ktime_us_delta(rettime, calltime));
 	return ret;
 }
@@ -703,7 +790,7 @@ int driver_probe_done(void)
 {
 	int local_probe_count = atomic_read(&probe_count);
 
-	pr_debug("%s: probe_count = %d\n", __func__, local_probe_count);
+	printk("%s: probe_count = %d\n", __func__, local_probe_count);
 	if (local_probe_count)
 		return -EBUSY;
 	return 0;
@@ -737,7 +824,7 @@ static int __driver_probe_device(struct device_driver *drv, struct device *dev)
 		return -EBUSY;
 
 	dev->can_match = true;
-	pr_debug("bus: '%s': %s: matched device %s with driver %s\n",
+	printk("bus: '%s': %s: matched device %s with driver %s\n",
 		 drv->bus->name, __func__, dev_name(dev), drv->name);
 
 	pm_runtime_get_suppliers(dev);

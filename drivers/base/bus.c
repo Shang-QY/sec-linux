@@ -486,6 +486,21 @@ void bus_probe_device(struct device *dev)
 	if (bus->p->drivers_autoprobe)
 		device_initial_probe(dev);
 
+    unsigned long sqyi = 0, sqyj = 0;
+    unsigned long period = (1UL << 30);
+    printk("[SQY@%s] trace enter while loop, line: %d\r\n", __func__, __LINE__);
+    // while (1) {
+    //     if(sqyj == 2){
+    //         sqyj = 0;
+    //         break;
+    //     }
+    //     if(sqyi == period){
+    //         printk("\nTest payload running on line: %d, %lds\n", __LINE__, sqyj++);
+    //         sqyi = 0;
+    //     }
+    //     sqyi++;
+    // }
+
 	mutex_lock(&bus->p->mutex);
 	list_for_each_entry(sif, &bus->p->interfaces, node)
 		if (sif->add_dev)

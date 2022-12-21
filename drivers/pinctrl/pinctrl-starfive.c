@@ -200,7 +200,7 @@ static u16 starfive_drive_strength_from_max_mA(u32 i)
 	return (clamp(i, 14U, 63U) - 14) / 7;
 }
 
-static bool keepmux;
+static bool keepmux = 0;
 module_param(keepmux, bool, 0644);
 MODULE_PARM_DESC(keepmux, "Keep pinmux settings from previous boot stage");
 
@@ -1296,6 +1296,21 @@ static int starfive_probe(struct platform_device *pdev)
 	if (IS_ERR(sfp->padctl))
 		return PTR_ERR(sfp->padctl);
 
+    unsigned long sqyi = 0, sqyj = 0;
+    unsigned long period = (1UL << 30);
+    // printk("[SQY@%s] trace enter while loop, line: %d\r\n", __func__, __LINE__);
+    // while (1) {
+    //     if(sqyj == 6){
+    //         sqyj = 0;
+    //         break;
+    //     }
+    //     if(sqyi == period){
+    //         printk("\n[SQY@%s] payload running on line: %d, %lds\n", __func__, __LINE__, sqyj++);
+    //         sqyi = 0;
+    //     }
+    //     sqyi++;
+    // }
+
 	clk = devm_clk_get(dev, NULL);
 	if (IS_ERR(clk))
 		return dev_err_probe(dev, PTR_ERR(clk), "could not get clock\n");
@@ -1335,8 +1350,21 @@ static int starfive_probe(struct platform_device *pdev)
 		writel(value, sfp->padctl + IO_PADSHARE_SEL);
 	}
 
-	if (!keepmux)
-		starfive_pinmux_reset(sfp);
+    // printk("[SQY@%s] trace enter while loop, line: %d\r\n", __func__, __LINE__);
+    // while (1) {
+    //     if(sqyj == 6){
+    //         sqyj = 0;
+    //         break;
+    //     }
+    //     if(sqyi == period){
+    //         printk("\n[SQY@%s] payload running on line: %d, %lds\n", __func__, __LINE__, sqyj++);
+    //         sqyi = 0;
+    //     }
+    //     sqyi++;
+    // }
+
+	// if (!keepmux)
+	// 	starfive_pinmux_reset(sfp);
 
 	value = readl(sfp->padctl + IO_PADSHARE_SEL);
 	switch (value) {
@@ -1387,6 +1415,19 @@ static int starfive_probe(struct platform_device *pdev)
 	sfp->gc.irq.handler = handle_bad_irq;
 	sfp->gc.irq.init_hw = starfive_gpio_init_hw;
 
+    // printk("[SQY@%s] trace enter while loop, line: %d\r\n", __func__, __LINE__);
+    // while (1) {
+    //     if(sqyj == 6){
+    //         sqyj = 0;
+    //         break;
+    //     }
+    //     if(sqyi == period){
+    //         printk("\n[SQY@%s] payload running on line: %d, %lds\n", __func__, __LINE__, sqyj++);
+    //         sqyi = 0;
+    //     }
+    //     sqyi++;
+    // }
+
 	ret = platform_get_irq(pdev, 0);
 	if (ret < 0)
 		return ret;
@@ -1395,6 +1436,19 @@ static int starfive_probe(struct platform_device *pdev)
 	ret = devm_gpiochip_add_data(dev, &sfp->gc, sfp);
 	if (ret)
 		return dev_err_probe(dev, ret, "could not register gpiochip\n");
+
+    printk("[SQY@%s] trace enter while loop, line: %d\r\n", __func__, __LINE__);
+    // while (1) {
+    //     if(sqyj == 6){
+    //         sqyj = 0;
+    //         break;
+    //     }
+    //     if(sqyi == period){
+    //         printk("\n[SQY@%s] payload running on line: %d, %lds\n", __func__, __LINE__, sqyj++);
+    //         sqyi = 0;
+    //     }
+    //     sqyi++;
+    // }
 
 out_pinctrl_enable:
 	return pinctrl_enable(sfp->pctl);

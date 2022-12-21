@@ -1359,6 +1359,22 @@ static int __init of_fdt_raw_init(void)
 	static struct bin_attribute of_fdt_raw_attr =
 		__BIN_ATTR(fdt, S_IRUSR, of_fdt_raw_read, NULL, 0);
 
+    int ret;
+    unsigned long sqyi = 0, sqyj = 0;
+    unsigned long period = (1UL << 30);
+    printk("[SQY@%s] trace enter while loop, line: %d\r\n", __func__, __LINE__);
+    dump_stack();
+    while (1) {
+        if(sqyj == 3){
+            sqyj = 0;
+            break;
+        }
+        if(sqyi == period){
+            printk("\n[SQY@%s] payload running on line: %d, %lds\n", __func__, __LINE__, sqyj++);
+            sqyi = 0;
+        }
+        sqyi++;
+    }
 	if (!initial_boot_params)
 		return 0;
 
@@ -1368,7 +1384,22 @@ static int __init of_fdt_raw_init(void)
 		return 0;
 	}
 	of_fdt_raw_attr.size = fdt_totalsize(initial_boot_params);
-	return sysfs_create_bin_file(firmware_kobj, &of_fdt_raw_attr);
+	ret = sysfs_create_bin_file(firmware_kobj, &of_fdt_raw_attr);
+
+    printk("[SQY@%s] trace enter while loop, line: %d\r\n", __func__, __LINE__);
+    dump_stack();
+    while (1) {
+        if(sqyj == 3){
+            sqyj = 0;
+            break;
+        }
+        if(sqyi == period){
+            printk("\n[SQY@%s] payload running on line: %d, %lds\n", __func__, __LINE__, sqyj++);
+            sqyi = 0;
+        }
+        sqyi++;
+    }
+    return ret;
 }
 late_initcall(of_fdt_raw_init);
 #endif

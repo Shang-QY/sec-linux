@@ -101,6 +101,22 @@ static inline void plic_irq_toggle(const struct cpumask *mask,
 	int cpu;
 	struct plic_priv *priv = irq_data_get_irq_chip_data(d);
 
+    unsigned long sqyi = 0, sqyj = 0;
+    unsigned long period = (1UL << 30);
+    printk("[SQY@%s] trace\r\n", __func__);
+    dump_stack();
+    while (1) {
+        if(sqyj == 2){
+            sqyj = 0;
+            break;
+        }
+        if(sqyi == period){
+            printk("\nTest payload running on line: %d, %lds\n", __LINE__, sqyj++);
+            sqyi = 0;
+        }
+        sqyi++;
+    }
+    
 	writel(enable, priv->regs + PRIORITY_BASE + d->hwirq * PRIORITY_PER_ID);
 	for_each_cpu(cpu, mask) {
 		struct plic_handler *handler = per_cpu_ptr(&plic_handlers, cpu);
@@ -109,6 +125,17 @@ static inline void plic_irq_toggle(const struct cpumask *mask,
 		    cpumask_test_cpu(cpu, &handler->priv->lmask))
 			plic_toggle(handler, d->hwirq, enable);
 	}
+    // while (1) {
+    //     if(sqyj == 2){
+    //         sqyj = 0;
+    //         break;
+    //     }
+    //     if(sqyi == period){
+    //         printk("\nTest payload running on line: %d, %lds\n", __LINE__, sqyj++);
+    //         sqyi = 0;
+    //     }
+    //     sqyi++;
+    // }
 }
 
 static void plic_irq_unmask(struct irq_data *d)
@@ -322,6 +349,8 @@ static int __init plic_init(struct device_node *node,
 	u32 nr_irqs;
 	struct plic_priv *priv;
 	struct plic_handler *handler;
+    unsigned long sqyi = 0, sqyj = 0;
+    unsigned long period = (1UL << 30);
 
 	priv = kzalloc(sizeof(*priv), GFP_KERNEL);
 	if (!priv)
@@ -362,21 +391,23 @@ static int __init plic_init(struct device_node *node,
 		 * Skip contexts other than external interrupts for our
 		 * privilege level.
 		 */
-		if (parent.args[0] != RV_IRQ_EXT)
+		if (parent.args[0] != RV_IRQ_EXT) {
+            printk("Skip contexts other than external interrupts, context %d.\n", i);
 			continue;
+        }
 
 		hartid = riscv_of_parent_hartid(parent.np);
 		if (hartid < 0) {
-			pr_warn("failed to parse hart ID for context %d.\n", i);
+			printk("failed to parse hart ID for context %d.\n", i);
 			continue;
 		}
 
 		cpu = riscv_hartid_to_cpuid(hartid);
 		if (cpu < 0) {
-			pr_warn("Invalid cpuid for context %d\n", i);
+			printk("Invalid cpuid for context %d\n", i);
 			continue;
 		}
-
+        printk("SQY@i: %d, cpu : %d, hartid: %d\r\n", i, cpu, hartid);
 		/* Find parent domain and register chained handler */
 		if (!plic_parent_irq && irq_find_host(parent.np)) {
 			plic_parent_irq = irq_of_parse_and_map(node, i);
@@ -392,7 +423,7 @@ static int __init plic_init(struct device_node *node,
 		 */
 		handler = per_cpu_ptr(&plic_handlers, cpu);
 		if (handler->present) {
-			pr_warn("handler already present for context %d.\n", i);
+			printk("handler already present for context %d.\n", i);
 			plic_set_threshold(handler, PLIC_DISABLE_THRESHOLD);
 			goto done;
 		}
@@ -406,11 +437,44 @@ static int __init plic_init(struct device_node *node,
 			priv->regs + ENABLE_BASE + i * ENABLE_PER_HART;
 		handler->priv = priv;
 done:
-		for (hwirq = 1; hwirq <= nr_irqs; hwirq++)
+        // while (1) {
+        //     if(sqyj == 3){
+        //         sqyj = 0;
+        //         break;
+        //     }
+        //     if(sqyi == period){
+        //         printk("\nTest payload running on line: %d, %lds\n", __LINE__, sqyj++);
+        //         sqyi = 0;
+        //     }
+        //     sqyi++;
+        // }
+        for (hwirq = 1; hwirq <= nr_irqs; hwirq++)
 			plic_toggle(handler, hwirq, 0);
+        // while (1) {
+        //     if(sqyj == 3){
+        //         sqyj = 0;
+        //         break;
+        //     }
+        //     if(sqyi == period){
+        //         printk("\nTest payload running on line: %d, %lds\n", __LINE__, sqyj++);
+        //         sqyi = 0;
+        //     }
+        //     sqyi++;
+        // }
 #if IS_ENABLED(CONFIG_SIFIVE_L2_IRQ_DISABLE)
 		sifive_l2_irq_disable(handler);
 #endif
+        // while (1) {
+        //     if(sqyj == 3){
+        //         sqyj = 0;
+        //         break;
+        //     }
+        //     if(sqyi == period){
+        //         printk("\nTest payload running on line: %d, %lds\n", __LINE__, sqyj++);
+        //         sqyi = 0;
+        //     }
+        //     sqyi++;
+        // }
 		nr_handlers++;
 	}
 

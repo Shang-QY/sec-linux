@@ -1407,6 +1407,21 @@ static int platform_probe(struct device *_dev)
 	if (ret)
 		goto out;
 
+    unsigned long sqyi = 0, sqyj = 0;
+    unsigned long period = (1UL << 30);
+    printk("[SQY@%s] trace enter while loop, line: %d\r\n", __func__, __LINE__);
+    while (1) {
+        if(sqyj == 1){
+            sqyj = 0;
+            break;
+        }
+        if(sqyi == period){
+            printk("\n[SQY@%s] payload running on line: %d, %lds\n", __func__, __LINE__, sqyj++);
+            sqyi = 0;
+        }
+        sqyi++;
+    }
+
 	if (drv->probe) {
 		ret = drv->probe(dev);
 		if (ret)
