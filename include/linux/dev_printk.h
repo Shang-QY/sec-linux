@@ -8,6 +8,7 @@
  *
  */
 
+#define DEBUG 1
 #ifndef _DEVICE_PRINTK_H_
 #define _DEVICE_PRINTK_H_
 
