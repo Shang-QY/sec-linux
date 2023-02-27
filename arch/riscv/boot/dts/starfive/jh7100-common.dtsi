@@ -15,7 +15,6 @@
 
 / {
 	aliases {
-		mshc1 = &sdio1;
 		serial0 = &uart3;
 	};
 
@@ -30,11 +29,6 @@
 	memory@80000000 {
 		device_type = "memory";
 		reg = <0x0 0x80000000 0x2 0x0>;
-	};
-
-	wifi_pwrseq: wifi-pwrseq {
-		compatible = "mmc-pwrseq-simple";
-		reset-gpios = <&gpio 37 GPIO_ACTIVE_LOW>;
 	};
 };
 
@@ -119,41 +113,6 @@
 		};
 	};
 
-	sdio1_pins: sdio1-0 {
-		clk-pins {
-			pinmux = <GPIOMUX(33, GPO_SDIO1_PAD_CCLK_OUT,
-				  GPO_ENABLE, GPI_NONE)>;
-			bias-disable;
-			input-disable;
-			input-schmitt-disable;
-		};
-		sdio-pins {
-			pinmux = <GPIOMUX(29,
-				  GPO_SDIO1_PAD_CCMD_OUT,
-				  GPO_SDIO1_PAD_CCMD_OEN,
-				  GPI_SDIO1_PAD_CCMD_IN)>,
-				 <GPIOMUX(36,
-				  GPO_SDIO1_PAD_CDATA_OUT_BIT0,
-				  GPO_SDIO1_PAD_CDATA_OEN_BIT0,
-				  GPI_SDIO1_PAD_CDATA_IN_BIT0)>,
-				 <GPIOMUX(30,
-				  GPO_SDIO1_PAD_CDATA_OUT_BIT1,
-				  GPO_SDIO1_PAD_CDATA_OEN_BIT1,
-				  GPI_SDIO1_PAD_CDATA_IN_BIT1)>,
-				 <GPIOMUX(34,
-				  GPO_SDIO1_PAD_CDATA_OUT_BIT2,
-				  GPO_SDIO1_PAD_CDATA_OEN_BIT2,
-				  GPI_SDIO1_PAD_CDATA_IN_BIT2)>,
-				 <GPIOMUX(31,
-				  GPO_SDIO1_PAD_CDATA_OUT_BIT3,
-				  GPO_SDIO1_PAD_CDATA_OEN_BIT3,
-				  GPI_SDIO1_PAD_CDATA_IN_BIT3)>;
-			bias-pull-up;
-			input-enable;
-			input-schmitt-enable;
-		};
-	};
-
 	uart3_pins: uart3-0 {
 		rx-pins {
 			pinmux = <GPIOMUX(13, GPO_LOW, GPO_DISABLE,
@@ -182,25 +141,6 @@
 
 &osc_aud {
 	clock-frequency = <27000000>;
-};
-
-&sdio1 {
-	#address-cells = <1>;
-	#size-cells = <0>;
-	bus-width = <4>;
-	cap-sd-highspeed;
-	cap-sdio-irq;
-	cap-power-off-card;
-	mmc-pwrseq = <&wifi_pwrseq>;
-	non-removable;
-	pinctrl-names = "default";
-	pinctrl-0 = <&sdio1_pins>;
-	status = "okay";
-
-	wifi@1 {
-		compatible = "brcm,bcm4329-fmac";
-		reg = <1>;
-	};
 };
 
 &uart3 {

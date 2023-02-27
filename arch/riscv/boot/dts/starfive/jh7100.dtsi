@@ -113,12 +113,6 @@
 		#size-cells = <2>;
 		ranges;
 
-		dtim: dtim@1000000 {
-			compatible = "starfive,dtim0";
-			reg = <0x0 0x1000000 0x0 0x2000>;
-			reg-names = "mem";
-		};
-
 		itim0: itim@1808000 {
 			compatible = "starfive,itim0";
 			reg = <0x0 0x1808000 0x0 0x8000>;
@@ -129,13 +123,6 @@
 			compatible = "starfive,itim0";
 			reg = <0x0 0x1820000 0x0 0x8000>;
 			reg-names = "mem";
-		};
-
-		clint: clint@2000000 {
-			compatible = "starfive,jh7100-clint", "sifive,clint0";
-			reg = <0x0 0x2000000 0x0 0x10000>;
-			interrupts-extended = <&cpu0_intc 3>, <&cpu0_intc 7>,
-					      <&cpu1_intc 3>, <&cpu1_intc 7>;
 		};
 
 		ccache: cache-controller@2010000 {
@@ -161,19 +148,6 @@
 			#address-cells = <0>;
 			#interrupt-cells = <1>;
 			riscv,ndev = <127>;
-		};
-
-		sdio1: mmc@10010000 {
-			compatible = "snps,dw-mshc";
-			reg = <0x0 0x10010000 0x0 0x10000>;
-			clocks = <&clkgen JH7100_CLK_SDIO1_AHB>,
-				 <&clkgen JH7100_CLK_SDIO1_CCLKINT_INV>;
-			clock-names = "biu", "ciu";
-			interrupts = <5>;
-			data-addr = <0>;
-			fifo-depth = <32>;
-			fifo-watermark-aligned;
-			status = "disabled";
 		};
 
 		/* gmac device configuration */
@@ -208,39 +182,6 @@
 			status = "disabled";
 		};
 
-		dma2p: dma-controller@100b0000 {
-			compatible = "snps,axi-dma-1.01a";
-			reg = <0x0 0x100b0000 0x0 0x10000>;
-			clocks = <&clkgen JH7100_CLK_SGDMA2P_AXI>,
-				 <&clkgen JH7100_CLK_SGDMA2P_AHB>;
-			clock-names = "core-clk", "cfgr-clk";
-			interrupts = <2>;
-			#dma-cells = <1>;
-			dma-channels = <4>;
-			snps,dma-masters = <1>;
-			snps,data-width = <4>;
-			snps,block-size = <4096 4096 4096 4096>;
-			snps,priority = <0 1 2 3>;
-			snps,axi-max-burst-len = <128>;
-			dma-coherent;
-		};
-
-		dma1p: dma-controller@10500000 {
-			compatible = "snps,axi-dma-1.01a";
-			reg = <0x0 0x10500000 0x0 0x10000>;
-			clocks = <&clkgen JH7100_CLK_SGDMA1P_AXI>,
-				 <&clkgen JH7100_CLK_SGDMA1P_BUS>;
-			clock-names = "core-clk", "cfgr-clk";
-			interrupts = <1>;
-			#dma-cells = <1>;
-			dma-channels = <16>;
-			snps,dma-masters = <1>;
-			snps,data-width = <3>;
-			snps,block-size = <4096 4096 4096 4096 4096 4096 4096 4096 4096 4096 4096 4096 4096 4096 4096 4096>;
-			snps,priority = <0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15>;
-			snps,axi-max-burst-len = <64>;
-		};
-
 		clkgen: clock-controller@11800000 {
 			compatible = "starfive,jh7100-clkgen";
 			reg = <0x0 0x11800000 0x0 0x10000>;
@@ -249,64 +190,9 @@
 			#clock-cells = <1>;
 		};
 
-		otp: otp@11810000 {
-			compatible = "starfive,fu740-otp";
-			reg = <0x0 0x11810000 0x0 0x10000>;
-			clocks = <&clkgen JH7100_CLK_OTP_APB>;
-			fuse-count = <0x200>;
-		};
-
 		rstgen: reset-controller@11840000 {
 			compatible = "starfive,jh7100-reset";
 			reg = <0x0 0x11840000 0x0 0x10000>;
-			#reset-cells = <1>;
-		};
-
-		i2c0: i2c@118b0000 {
-			compatible = "snps,designware-i2c";
-			reg = <0x0 0x118b0000 0x0 0x10000>;
-			clocks = <&clkgen JH7100_CLK_I2C0_CORE>,
-				 <&clkgen JH7100_CLK_I2C0_APB>;
-			clock-names = "ref", "pclk";
-			resets = <&rstgen JH7100_RSTN_I2C0_APB>;
-			interrupts = <96>;
-			#address-cells = <1>;
-			#size-cells = <0>;
-			status = "disabled";
-		};
-
-		i2c1: i2c@118c0000 {
-			compatible = "snps,designware-i2c";
-			reg = <0x0 0x118c0000 0x0 0x10000>;
-			clocks = <&clkgen JH7100_CLK_I2C1_CORE>,
-				 <&clkgen JH7100_CLK_I2C1_APB>;
-			clock-names = "ref", "pclk";
-			resets = <&rstgen JH7100_RSTN_I2C1_APB>;
-			interrupts = <97>;
-			#address-cells = <1>;
-			#size-cells = <0>;
-			status = "disabled";
-		};
-
-		trng: trng@118d0000 {
-			compatible = "starfive,vic-rng";
-			reg = <0x0 0x118d0000 0x0 0x10000>;
-			clocks = <&clkgen JH7100_CLK_TRNG_APB>;
-			interrupts = <98>;
-		};
-
-		ispclk: clock-controller@19810000 {
-			compatible = "starfive,jh7100-ispclk";
-			reg = <0x0 0x19810000 0x0 0x10000>;
-			clocks = <&clkgen JH7100_CLK_VIN_SRC>,
-				 <&clkgen JH7100_CLK_ISPSLV_AXI>;
-			clock-names = "vin_src", "ispslv_axi";
-			#clock-cells = <1>;
-		};
-
-		isprst: reset-controller@19820000 {
-			compatible = "starfive,jh7100-isprst";
-			reg = <0x0 0x19820000 0x0 0x10000>;
 			#reset-cells = <1>;
 		};
 
@@ -336,98 +222,5 @@
 			reg-shift = <2>;
 			status = "disabled";
 		};
-
-		i2c3: i2c@12460000 {
-			compatible = "snps,designware-i2c";
-			reg = <0x0 0x12460000 0x0 0x10000>;
-			clocks = <&clkgen JH7100_CLK_I2C3_CORE>,
-				 <&clkgen JH7100_CLK_I2C3_APB>;
-			clock-names = "ref", "pclk";
-			resets = <&rstgen JH7100_RSTN_I2C3_APB>;
-			interrupts = <75>;
-			#address-cells = <1>;
-			#size-cells = <0>;
-			status = "disabled";
-		};
-
-		watchdog@12480000 {
-			compatible = "starfive,si5-wdt";
-			reg = <0x0 0x12480000 0x0 0x10000>;
-			clocks = <&clkgen JH7100_CLK_WDT_CORE>,
-				 <&clkgen JH7100_CLK_WDTIMER_APB>;
-			clock-names = "wdt_coreclk", "wdtimer_apb";
-			resets = <&rstgen JH7100_RSTN_WDTIMER_APB>,
-				 <&rstgen JH7100_RSTN_WDT>;
-			reset-names = "wdtimer_apb", "wdt";
-			interrupts = <80>;
-		};
-
-		sfctemp: tmon@124a0000 {
-			compatible = "starfive,jh7100-temp";
-			reg = <0x0 0x124a0000 0x0 0x10000>;
-			clocks = <&clkgen JH7100_CLK_TEMP_SENSE>,
-				 <&clkgen JH7100_CLK_TEMP_APB>;
-			clock-names = "sense", "bus";
-			resets = <&rstgen JH7100_RSTN_TEMP_SENSE>,
-				 <&rstgen JH7100_RSTN_TEMP_APB>;
-			reset-names = "sense", "bus";
-			interrupts = <122>;
-			#thermal-sensor-cells = <0>;
-		};
-
-		thermal-zones {
-			cpu-thermal {
-				polling-delay-passive = <250>;
-				polling-delay = <15000>;
-
-				thermal-sensors = <&sfctemp>;
-
-				cooling-maps {
-				};
-
-				trips {
-					cpu_alert0: cpu_alert0 {
-						/* milliCelsius */
-						temperature = <75000>;
-						hysteresis = <2000>;
-						type = "passive";
-					};
-
-					cpu_crit: cpu_crit {
-						/* milliCelsius */
-						temperature = <90000>;
-						hysteresis = <2000>;
-						type = "critical";
-					};
-				};
-			};
-		};
-
-		audclk: clock-controller@10480000 {
-			compatible = "starfive,jh7100-audclk";
-			reg = <0x0 0x10480000 0x0 0x10000>;
-			clocks = <&clkgen JH7100_CLK_AUDIO_SRC>,
-				 <&clkgen JH7100_CLK_AUDIO_12288>,
-				 <&clkgen JH7100_CLK_DOM7AHB_BUS>;
-			clock-names = "audio_src", "audio_12288", "dom7ahb_bus";
-			#clock-cells = <1>;
-		};
-
-		audrst: reset-controller@10490000 {
-			compatible = "starfive,jh7100-audrst";
-			reg = <0x0 0x10490000 0x0 0x10000>;
-			#reset-cells = <1>;
-		};
-
-		spdif_transmitter: spdif_transmitter {
-			compatible = "linux,spdif-dit";
-			#sound-dai-cells = <0>;
-		};
-
-		spdif_receiver: spdif_receiver {
-			compatible = "linux,spdif-dir";
-			#sound-dai-cells = <0>;
-		};
-
 	};
 };
