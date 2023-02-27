@@ -74,7 +74,6 @@
 		};
 	};
 
-    // sys clock
 	osc_sys: osc_sys {
 		compatible = "fixed-clock";
 		#clock-cells = <0>;
@@ -89,7 +88,7 @@
 		clock-frequency = <0>;
 	};
 
-    gmac_rmii_ref: gmac_rmii_ref {
+	gmac_rmii_ref: gmac_rmii_ref {
 		compatible = "fixed-clock";
 		#clock-cells = <0>;
 		/* Should be overridden by the board when needed */
@@ -121,20 +120,7 @@
 			riscv,ndev = <127>;
 		};
 
-        sdio1: mmc@10010000 {
-			compatible = "snps,dw-mshc";
-			reg = <0x0 0x10010000 0x0 0x10000>;
-			clocks = <&clkgen JH7100_CLK_SDIO1_AHB>,
-				 <&clkgen JH7100_CLK_SDIO1_CCLKINT_INV>;
-			clock-names = "biu", "ciu";
-			interrupts = <5>;
-			data-addr = <0>;
-			fifo-depth = <32>;
-			fifo-watermark-aligned;
-			status = "disabled";
-		};
-
-        /* gmac device configuration */
+		/* gmac device configuration */
 		stmmac_axi_setup: stmmac-axi-config {
 			snps,wr_osr_lmt = <0xf>;
 			snps,rd_osr_lmt = <0xf>;
