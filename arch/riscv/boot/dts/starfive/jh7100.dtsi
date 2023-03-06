@@ -38,7 +38,9 @@
 			i-tlb-sets = <1>;
 			i-tlb-size = <32>;
 			mmu-type = "riscv,sv39";
+			next-level-cache = <&ccache>;
 			riscv,isa = "rv64imafdc";
+			starfive,itim = <&itim0>;
 			tlb-split;
 
 			cpu0_intc: interrupt-controller {
@@ -63,7 +65,9 @@
 			i-tlb-sets = <1>;
 			i-tlb-size = <32>;
 			mmu-type = "riscv,sv39";
+			next-level-cache = <&ccache>;
 			riscv,isa = "rv64imafdc";
+			starfive,itim = <&itim1>;
 			tlb-split;
 
 			cpu1_intc: interrupt-controller {
@@ -108,6 +112,32 @@
 		#address-cells = <2>;
 		#size-cells = <2>;
 		ranges;
+
+		itim0: itim@1808000 {
+			compatible = "starfive,itim0";
+			reg = <0x0 0x1808000 0x0 0x8000>;
+			reg-names = "mem";
+		};
+
+		itim1: itim@1820000 {
+			compatible = "starfive,itim0";
+			reg = <0x0 0x1820000 0x0 0x8000>;
+			reg-names = "mem";
+		};
+
+		ccache: cache-controller@2010000 {
+			compatible = "sifive,fu540-c000-ccache", "starfive,ccache0", "cache";
+			reg = <0x0 0x2010000 0x0 0x1000>,
+			      <0x0 0x8000000 0x0 0x2000000>;
+			reg-names = "control", "sideband";
+			interrupts = <128>, <131>, <129>, <130>;
+			cache-block-size = <64>;
+			cache-level = <2>;
+			cache-sets = <2048>;
+			cache-size = <2097152>;
+			cache-unified;
+			/*next-level-cache = <&L40 &L36>;*/
+		};
 
 		plic: interrupt-controller@c000000 {
 			compatible = "starfive,jh7100-plic", "sifive,plic-1.0.0";
